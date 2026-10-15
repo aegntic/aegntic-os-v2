@@ -1,0 +1,15 @@
+# Build log
+
+## First run — 15 October 2026
+
+**Delivered:** local V2 outcome workspace. Choose one of five outcome families, save a useful brief, and record evidence for all six pre-launch controls. Briefs and reviews survive closing/reopening storage. Unconnected capabilities are visible; no agent run or release is claimed.
+
+**Checks:** four automated tests / 26 assertions; successful server/browser bundle builds; supplemental Oxlint; seven browser checks across desktop/mobile. The browser exercised a lost response after a successful backend save and confirmed that retry reused the existing brief.
+
+**Review fixes:** saving one review no longer discards another control's draft. Brief creation no longer depends on a second refresh that could fail after successful creation. Simultaneous submissions are guarded and new brief edits made during a save are retained.
+
+**Boundaries:** SQLite here stores local brief/review records only. Pi Durable retains planned execution ownership; Convex remains the planned shared application store. No third-party account, model provider, social destination or paid service was contacted. No infrastructure or app-store deployment was performed.
+
+**Public release:** source and public-safe log prepared locally. GitHub destination and final operative license remain pending. Private research and local runtime data are excluded.
+
+**Next slice:** qualify the pinned Pi Durable interface, connect one bounded execution path, and project its authoritative status into Convex after service configuration is available. No replacement workflow scheduler will be added.

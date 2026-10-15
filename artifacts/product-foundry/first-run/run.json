@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "run_id": "first-run",
+  "workflow": {
+    "name": "product-foundry",
+    "version": "0.1.0+codex.20260905040946",
+    "entrypoint_sha256": "afff803cc266e7a49f0abd9201085ae5f7e422b0199dc23449de72850299907f"
+  },
+  "objective": "First useful local V2 outcome workspace with verified persistence and pre-launch records",
+  "baseline_revision": "new repository, no prior implementation",
+  "constraints": [
+    "loopback only",
+    "no private research source imported",
+    "no simulated provider execution",
+    "no external publication without resolved destination and license"
+  ],
+  "authorized_actions": [
+    "local implementation",
+    "local tests",
+    "local git repository",
+    "public-safe build-log preparation"
+  ],
+  "budget": {
+    "candidate_revisions": 2
+  },
+  "stage": "handoff",
+  "status": "PASS",
+  "full_v2_status": "NOT_RUN",
+  "public_release_status": "PENDING",
+  "artifacts": [
+    "contract.md",
+    "requirements.json",
+    "plan.md",
+    "evidence.md",
+    "browser-evidence.json",
+    "handoff.md",
+    "component-record.json",
+    "workspace-desktop.png",
+    "workspace-mobile.png"
+  ],
+  "next_action": "Configure and qualify actual Pi Durable integration; resolve public destination/licensing separately"
+}

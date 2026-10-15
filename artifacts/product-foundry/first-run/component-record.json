@@ -1,0 +1,12 @@
+{
+  "component": "local-outcome-workspace",
+  "scope": "single-user development",
+  "observed_benefit": "briefs and pre-launch records persist; idempotent retries avoid duplication",
+  "measured_performance_improvement": null,
+  "regressions": [
+    "cross-control draft loss",
+    "post-create refresh failure causing duplicate retry"
+  ],
+  "invalidation": "change persistence schema, request identity, review rendering or execution boundary; rerun affected checks",
+  "rollback": "stop local process and restore preceding source revision; preserve local database backup"
+}

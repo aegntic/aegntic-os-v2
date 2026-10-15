@@ -1,0 +1,44 @@
+[
+  {
+    "id": "R1",
+    "owner_unit": "ui",
+    "priority": "required",
+    "phase": "first-local-slice",
+    "protocol_id": "local-outcome-v1"
+  },
+  {
+    "id": "R2",
+    "owner_unit": "store",
+    "priority": "required",
+    "phase": "first-local-slice",
+    "protocol_id": "local-outcome-v1"
+  },
+  {
+    "id": "R3",
+    "owner_unit": "store",
+    "priority": "required",
+    "phase": "first-local-slice",
+    "protocol_id": "local-outcome-v1"
+  },
+  {
+    "id": "R4",
+    "owner_unit": "review",
+    "priority": "required",
+    "phase": "first-local-slice",
+    "protocol_id": "local-outcome-v1"
+  },
+  {
+    "id": "R5",
+    "owner_unit": "http",
+    "priority": "required",
+    "phase": "first-local-slice",
+    "protocol_id": "local-outcome-v1"
+  },
+  {
+    "id": "R6",
+    "owner_unit": "browser",
+    "priority": "required",
+    "phase": "first-local-slice",
+    "protocol_id": "local-outcome-v1"
+  }
+]
