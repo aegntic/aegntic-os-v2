@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "run_id": "creative-kickoff",
+  "workflow": {
+    "name": "product-foundry",
+    "version": "0.1.0+codex.20260905040946",
+    "entrypoint_sha256": "afff803cc266e7a49f0abd9201085ae5f7e422b0199dc23449de72850299907f"
+  },
+  "objective": "Aesthetic selection and explicit social/teaser approval before building",
+  "baseline_revision": "b315b25ca84792a196365470369f8f4e092aaa72",
+  "constraints": [
+    "amber reserved for Clawreform",
+    "no final aesthetic selected by assistant",
+    "local only",
+    "asset references operator supplied"
+  ],
+  "authorized_actions": [
+    "local code",
+    "tests",
+    "logo retrieval",
+    "visual-reference inspection"
+  ],
+  "budget": {
+    "candidate_revisions": 2
+  },
+  "stage": "handoff",
+  "status": "PASS",
+  "asset_production_status": "NOT_RUN",
+  "artifacts": [
+    "contract.md",
+    "requirements.json",
+    "plan.md",
+    "evidence.md",
+    "browser-evidence.json",
+    "component-record.json",
+    "handoff.md",
+    "aesthetic-options.png",
+    "aesthetic-mobile.png",
+    "logo-provenance.json",
+    "brief-review-regression/browser-evidence.json"
+  ],
+  "next_action": "User selects direction; prepare actual launch assets for review before execution"
+}

@@ -1,0 +1,13 @@
+{
+  "component": "creative-approval-gate",
+  "scope": "local single-user kickoff",
+  "provenance": "user requirements and supplied design references",
+  "evidence": [
+    "browser-evidence.json",
+    "evidence.md"
+  ],
+  "freshness_trigger": "changes to creative fields, execution dispatch or shared project refresh",
+  "regression": "displayed revision must not silently adopt a newer revision following prelaunch review save",
+  "rollback": "revert application changes; additive creative table may remain",
+  "measured_benefit": "stale approval refused in browser and HTTP regression checks; no broader productivity claim"
+}

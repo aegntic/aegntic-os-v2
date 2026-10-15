@@ -1,0 +1,44 @@
+[
+  {
+    "id": "C01-four-previews",
+    "owner_unit": "frontend",
+    "priority": "required",
+    "phase": "creative-kickoff",
+    "protocol_id": "local-ui-and-http"
+  },
+  {
+    "id": "C02-brand-separation",
+    "owner_unit": "design",
+    "priority": "required",
+    "phase": "creative-kickoff",
+    "protocol_id": "local-ui-and-http"
+  },
+  {
+    "id": "C03-persistent-approval",
+    "owner_unit": "store",
+    "priority": "required",
+    "phase": "creative-kickoff",
+    "protocol_id": "local-ui-and-http"
+  },
+  {
+    "id": "C04-execution-gate",
+    "owner_unit": "server",
+    "priority": "required",
+    "phase": "creative-kickoff",
+    "protocol_id": "local-ui-and-http"
+  },
+  {
+    "id": "C05-stale-revision-refusal",
+    "owner_unit": "store-and-ui",
+    "priority": "required",
+    "phase": "creative-kickoff",
+    "protocol_id": "local-ui-and-http"
+  },
+  {
+    "id": "C06-accessible-interaction",
+    "owner_unit": "frontend",
+    "priority": "required",
+    "phase": "creative-kickoff",
+    "protocol_id": "local-ui-and-http"
+  }
+]

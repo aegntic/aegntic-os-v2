@@ -1,6 +1,6 @@
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { openStore, outcomes, controls, InputError } from "./store.js";
+import { openStore, outcomes, controls, aesthetics, InputError } from "./store.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export function startServer({ port = 4317, database = resolve(root, ".data/workspace.db") } = {}) {
@@ -25,12 +25,12 @@ export function startServer({ port = 4317, database = resolve(root, ".data/works
         const url = new URL(req.url);
         const allowedOrigin = server.url.origin;
         if (url.origin !== allowedOrigin || (req.headers.get("origin") && req.headers.get("origin") !== allowedOrigin)) return json({ error: "This workspace accepts same-origin local requests only." }, 403);
-        const assets = { "/": ["index.html", "text/html; charset=utf-8"], "/app.js": ["app.js", "text/javascript; charset=utf-8"], "/styles.css": ["styles.css", "text/css; charset=utf-8"] };
+        const assets = { "/assets/aegntic-mark.webp": ["assets/aegntic-mark.webp", "image/webp"], "/": ["index.html", "text/html; charset=utf-8"], "/app.js": ["app.js", "text/javascript; charset=utf-8"], "/styles.css": ["styles.css", "text/css; charset=utf-8"] };
         if (req.method === "GET" && assets[url.pathname]) {
           const [name, type] = assets[url.pathname];
           return new Response(Bun.file(resolve(root, "public", name)), { headers: { ...headers, "Content-Type": type } });
         }
-        if (req.method === "GET" && url.pathname === "/api/workspace") return json({ outcomes, controls, capabilities, projects: store.list(), version: "0.1.0", mode: "LOCAL_FIRST_RUN" });
+        if (req.method === "GET" && url.pathname === "/api/workspace") return json({ outcomes, controls, aesthetics, capabilities, projects: store.list(), version: "0.1.0", mode: "LOCAL_FIRST_RUN" });
         if (!["GET", "POST", "PUT"].includes(req.method)) return json({ error: "Method not allowed." }, 405);
         if (["POST", "PUT"].includes(req.method) && !req.headers.get("content-type")?.startsWith("application/json")) return json({ error: "JSON content type required." }, 415);
         async function body() {
@@ -42,12 +42,17 @@ export function startServer({ port = 4317, database = resolve(root, ".data/works
           const result = store.create(await body(), req.headers.get("idempotency-key"));
           return json(result, result.replayed ? 200 : 201);
         }
+        const projectRead = /^\/api\/projects\/([a-f0-9-]{36})$/.exec(url.pathname);
+        if (req.method === "GET" && projectRead) return json({ project: store.project(projectRead[1]) });
+        const creative = /^\/api\/projects\/([a-f0-9-]{36})\/creative(\/approve)?$/.exec(url.pathname);
+        if (req.method === "PUT" && creative && !creative[2]) return json({ project: store.saveCreative(creative[1], await body()) });
+        if (req.method === "POST" && creative?.[2]) return json({ project: store.approveCreative(creative[1], await body()) });
         const review = /^\/api\/projects\/([a-f0-9-]{36})\/reviews\/(C[1-6])$/.exec(url.pathname);
         if (req.method === "PUT" && review) return json({ project: store.review(review[1], review[2], await body()) });
         const events = /^\/api\/projects\/([a-f0-9-]{36})\/events$/.exec(url.pathname);
         if (req.method === "GET" && events) return json({ events: store.events(events[1]) });
         const execute = /^\/api\/projects\/([a-f0-9-]{36})\/execute$/.exec(url.pathname);
-        if (req.method === "POST" && execute) { store.project(execute[1]); return json({ error: "Pi Durable is not connected. Brief saved; no execution started.", code: "NOT_CONNECTED" }, 503); }
+        if (req.method === "POST" && execute) { const project = store.project(execute[1]); if (!project.creativeReady) return json({ error: "Choose an aesthetic and approve the social graphics, teaser and call to action before building.", code: "CREATIVE_APPROVAL_REQUIRED" }, 409); return json({ error: "Pi Durable is not connected. Brief saved; no execution started.", code: "NOT_CONNECTED" }, 503); }
         return json({ error: "Not found." }, 404);
       } catch (error) {
         if (error instanceof InputError) return json({ error: error.message }, error.status);

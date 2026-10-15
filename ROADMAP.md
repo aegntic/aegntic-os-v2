@@ -14,3 +14,7 @@
 | Native social, website and mobile delivery | NOT_CONNECTED | Authorized provider operations with receipts and reconciliation |
 
 Preparation is not execution. A passing local slice is not a complete V2 platform or a production release.
+
+## Creative prerequisites
+
+Implemented locally: four aesthetic previews, original mark, saved launch-kit draft and human approval with stale-write protection. Next: user chooses direction; produce social masters and 30–60 second teaser; review actual assets; then connect execution. Add immutable asset hashes before shared production use.

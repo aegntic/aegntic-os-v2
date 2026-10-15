@@ -13,3 +13,7 @@
 **Public release:** source and public-safe log prepared locally. GitHub destination and final operative license remain pending. Private research and local runtime data are excluded.
 
 **Next slice:** qualify the pinned Pi Durable interface, connect one bounded execution path, and project its authoritative status into Convex after service configuration is available. No replacement workflow scheduler will be added.
+
+## 2026-10-15 — Creative kickoff
+
+Added four neutral material directions, the existing Echo Aegntic mark, CTA and launch-asset records, 30–60 second declared duration, revision-bound approval and a server execution gate. Amber is reserved for Clawreform. Independent review found a stale displayed-revision problem after unrelated review saves; fixed and covered in the browser regression. Final launch assets remain unproduced and unapproved.

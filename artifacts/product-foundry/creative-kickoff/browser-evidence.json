@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Four distinct aesthetic previews displayed before brief",
+    "Selected direction follows new brief into kickoff",
+    "Explicit saved-package approval works",
+    "Approval survives browser reload",
+    "Changed asset revokes approval and execution returns 409",
+    "Approval binds displayed revision even after unrelated review refresh",
+    "Reopening fetches latest draft and focuses kickoff",
+    "Aesthetic selection preserves keyboard focus",
+    "390px layout has no horizontal overflow",
+    "No browser runtime errors"
+  ],
+  "status": "PASS",
+  "testProjectId": "318f5ce1-f592-43f7-84d8-ffd7dc2e55fc",
+  "fixtureApproval": "revoked before completion"
+}

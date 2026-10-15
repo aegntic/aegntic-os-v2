@@ -44,3 +44,7 @@ A repeatable browser check is in `tests/browser-smoke.cjs`. Run it against the l
 ## Licensing
 
 The owner's proposed community/commercial policy allows personal and eligible startup use with monetary recognition above the confirmed revenue/user thresholds. The operative license and legal licensor have not been finalized. See [LICENSING-STATUS.md](LICENSING-STATUS.md). This first-run code is not represented as MIT, Apache or OSI-approved open source.
+
+## Creative kickoff
+
+Four material/aesthetic examples now precede the brief. Every project requires a saved, explicitly approved social graphics and 30–60 second teaser package before execution. Changing the package revokes approval. See [creative kickoff](CREATIVE-KICKOFF.md). Final assets are not produced or verified by the local app; operator references are recorded.

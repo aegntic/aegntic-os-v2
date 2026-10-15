@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "checks": [
+    "five outcome cards",
+    "save works without post-create refresh",
+    "review draft survives another control save",
+    "review survives reload",
+    "lost-response retry does not duplicate",
+    "mobile has no horizontal overflow",
+    "no browser page errors"
+  ],
+  "screenshots": [
+    "workspace-desktop.png",
+    "workspace-mobile.png"
+  ],
+  "externalRequests": "none intentionally made; only loopback app requests",
+  "testRecordsCreated": 2
+}
