@@ -1,0 +1,30 @@
+[
+  {
+    "id": "H01-four-layouts",
+    "owner_unit": "concepts",
+    "priority": "required",
+    "phase": "visual-concepts",
+    "protocol_id": "visual-browser"
+  },
+  {
+    "id": "H02-hero-imagery",
+    "owner_unit": "assets",
+    "priority": "required",
+    "phase": "visual-concepts",
+    "protocol_id": "visual-browser"
+  },
+  {
+    "id": "H03-responsive-and-focus",
+    "owner_unit": "frontend",
+    "priority": "required",
+    "phase": "visual-concepts",
+    "protocol_id": "visual-browser"
+  },
+  {
+    "id": "H04-preserve-approval",
+    "owner_unit": "integration",
+    "priority": "required",
+    "phase": "visual-concepts",
+    "protocol_id": "visual-browser"
+  }
+]

@@ -1,3 +1,4 @@
+import { concepts, renderConcept } from "./concepts.js";
 let state; let selected = "product-foundry"; let activeProject; let pendingSubmission; let briefBusy = false; let reviewBusy = false;
 const el = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
 const $ = (id) => document.getElementById(id);
@@ -14,13 +15,7 @@ function renderAesthetics() {
   $("aesthetics").replaceChildren(...state.aesthetics.map((a, index) => {
     const button = el("button", undefined, `aesthetic ${a.id}`); button.type = "button";
     button.setAttribute("aria-pressed", String(previewAesthetic === a.id));
-    const canvas = el("div", undefined, "sample");
-    canvas.append(el("span", `AE. / ${String(index + 1).padStart(2, "0")}`, "sample-label"));
-    const composition = el("div", undefined, "sample-composition");
-    composition.append(el("span", "A clear idea."), el("strong", "Made real."), el("span", "A place for what comes next.", "sample-caption"), el("span", "Join the waitlist ↗", "sample-cta"));
-    canvas.append(composition, el("span", "EXAMPLE / NOT APPROVED", "sample-label"));
-    const caption = el("div", undefined, "aesthetic-caption"); caption.append(el("strong", a.name), el("small", a.description), el("span", a.mood));
-    button.append(canvas, caption);
+    button.append(el("small", concepts[a.id].layout), el("strong", a.name));
     button.onclick = () => {
       if (creativeBusy) return;
       previewAesthetic = a.id; renderAesthetics(); $("aesthetics").children[index].focus({ preventScroll: true });
@@ -29,7 +24,15 @@ function renderAesthetics() {
     };
     return button;
   }));
+  renderConcept(previewAesthetic || "obsidian", $("style-preview"));
 }
+$("expand-preview").onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else if ($("style-preview").requestFullscreen) await $("style-preview").requestFullscreen();
+    else notice("Full-screen preview is unavailable in this browser. The complete layout is shown below.");
+  } catch { notice("Full-screen preview is unavailable here. The complete layout is shown below."); }
+};
 async function openCreative(projectId) {
   if (creativeBusy) return;
   const request = ++creativeOpenRequest;

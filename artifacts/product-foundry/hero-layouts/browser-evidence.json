@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "checks": [
+    "obsidian: hero loaded, selected, keyboard focus retained",
+    "chrome: hero loaded, selected, keyboard focus retained",
+    "pearl: hero loaded, selected, keyboard focus retained",
+    "signal: hero loaded, selected, keyboard focus retained",
+    "Full-screen preview opens and exits",
+    "obsidian: 390px no horizontal overflow",
+    "chrome: 390px no horizontal overflow",
+    "pearl: 390px no horizontal overflow",
+    "signal: 390px no horizontal overflow",
+    "No browser runtime errors"
+  ]
+}

@@ -18,3 +18,7 @@ Preparation is not execution. A passing local slice is not a complete V2 platfor
 ## Creative prerequisites
 
 Implemented locally: four aesthetic previews, original mark, saved launch-kit draft and human approval with stale-write protection. Next: user chooses direction; produce social masters and 30–60 second teaser; review actual assets; then connect execution. Add immutable asset hashes before shared production use.
+
+## 2026-10-15 — Hero and layout studies
+
+Four full-page hero/layout studies are now available. Next: user chooses or combines a direction, then produce the social masters and 30–60 second teaser for approval.

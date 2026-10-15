@@ -1,0 +1,15 @@
+{
+  "created": "2026-10-15",
+  "method": "built-in image_gen; original generated PNGs copied into public/assets",
+  "purpose": "Illustrative hero concepts; not actual Aegntic hardware",
+  "assets": [
+    {
+      "file": "public/assets/hero-glass-gallery.png",
+      "sha256": "8bed1d12291b5052898073c4658ec8132bec6220dd47c6a57e6a718a14ca7e05"
+    },
+    {
+      "file": "public/assets/hero-smoked-instrument.png",
+      "sha256": "8a7066d5037dfa2d12f685975fb690cc9ba43205bd41e66b3e5b2a134843f1e4"
+    }
+  ]
+}

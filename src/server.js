@@ -25,7 +25,7 @@ export function startServer({ port = 4317, database = resolve(root, ".data/works
         const url = new URL(req.url);
         const allowedOrigin = server.url.origin;
         if (url.origin !== allowedOrigin || (req.headers.get("origin") && req.headers.get("origin") !== allowedOrigin)) return json({ error: "This workspace accepts same-origin local requests only." }, 403);
-        const assets = { "/assets/aegntic-mark.webp": ["assets/aegntic-mark.webp", "image/webp"], "/": ["index.html", "text/html; charset=utf-8"], "/app.js": ["app.js", "text/javascript; charset=utf-8"], "/styles.css": ["styles.css", "text/css; charset=utf-8"] };
+        const assets = { "/concepts.js": ["concepts.js", "text/javascript; charset=utf-8"], "/concepts.css": ["concepts.css", "text/css; charset=utf-8"], "/assets/hero-glass-gallery.png": ["assets/hero-glass-gallery.png", "image/png"], "/assets/hero-smoked-instrument.png": ["assets/hero-smoked-instrument.png", "image/png"], "/assets/aegntic-mark.webp": ["assets/aegntic-mark.webp", "image/webp"], "/": ["index.html", "text/html; charset=utf-8"], "/app.js": ["app.js", "text/javascript; charset=utf-8"], "/styles.css": ["styles.css", "text/css; charset=utf-8"] };
         if (req.method === "GET" && assets[url.pathname]) {
           const [name, type] = assets[url.pathname];
           return new Response(Bun.file(resolve(root, "public", name)), { headers: { ...headers, "Content-Type": type } });

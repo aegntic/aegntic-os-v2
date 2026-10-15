@@ -1,0 +1,13 @@
+{
+  "component": "four-hero-layout-concepts",
+  "scope": "static local design exploration",
+  "baseline": "da1087c",
+  "provenance": "user feedback and Aegntic visual references; generated hero assets",
+  "evidence": [
+    "browser-evidence.json",
+    "evidence.md"
+  ],
+  "measured_benefit": "Four structurally different templates render with intact selection and approval flow; user preference unmeasured",
+  "freshness_trigger": "template, image path, viewport or selector changes",
+  "rollback": "revert this visual revision; no database migration"
+}

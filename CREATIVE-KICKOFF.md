@@ -33,3 +33,16 @@ Pi Durable must check the approved creative revision immediately before executio
 ## Recovery
 
 No destructive migration: an additive creative table leaves existing briefs/reviews intact. Existing briefs start unapproved. Version conflicts return 409; reopening fetches the current project. Approval binds to the revision actually rendered, independently of other project updates. Database backup remains the rollback boundary. No remote deployment or publication occurred.
+
+## Hero and layout revision — 2026-10-15
+
+The first four swatches were too similar. Replaced them with four full page compositions, accessible through a large switchable preview:
+
+- Obsidian: cinematic full-bleed smoked-glass instrument, oversized headline and floating glass invitation.
+- Chrome: bold masthead, panoramic architectural glass installation and numbered process strip.
+- Pearl: journal masthead, contents rail, portrait crop and asymmetrical editorial spread.
+- Instrument: narrow navigation rail, modular workbench, object photograph and sample build log.
+
+Two 1536×1024 photoreal concept images were generated with the built-in image-generation tool and saved inside the project. They are illustrative material studies, not photographs of an existing Aegntic hardware product. Preview copy and CTAs are illustrative and do not collect signups. The existing brand mark remains in the workspace. Amber remains reserved for Clawreform.
+
+Aesthetic IDs remain unchanged; exploring a layout does not approve a project. Existing asset references and approval behavior are preserved. The light Glass Manifesto is additional visual reference data; no embedded instructions or numerical business claims were adopted.

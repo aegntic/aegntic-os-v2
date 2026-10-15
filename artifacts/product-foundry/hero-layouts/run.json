@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "run_id": "hero-layouts",
+  "workflow": {
+    "name": "product-foundry",
+    "version": "0.1.0+codex.20260905040946",
+    "entrypoint_sha256": "afff803cc266e7a49f0abd9201085ae5f7e422b0199dc23449de72850299907f"
+  },
+  "objective": "Replace similar swatches with four distinctive layouts and generated hero imagery",
+  "baseline_revision": "da1087c",
+  "constraints": [
+    "Aegntic neutral materials; amber belongs to Clawreform",
+    "local only",
+    "no final approval inferred"
+  ],
+  "authorized_actions": [
+    "local UI changes",
+    "hero image generation",
+    "browser verification"
+  ],
+  "budget": {
+    "candidate_revisions": 2
+  },
+  "stage": "handoff",
+  "status": "PASS",
+  "independent_review": "UNAVAILABLE_USAGE_LIMIT",
+  "artifacts": [
+    "contract.md",
+    "requirements.json",
+    "plan.md",
+    "evidence.md",
+    "browser-evidence.json",
+    "asset-provenance.json",
+    "component-record.json",
+    "handoff.md",
+    "workspace-preview.png"
+  ],
+  "next_action": "User selects a direction for launch-kit production"
+}
