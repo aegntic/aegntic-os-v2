@@ -25,3 +25,7 @@ Replaced similar swatches with four structurally different hero layouts. Generat
 ## 2026-10-16 — 45-second explainer concept
 
 Produced a 1920×1080 / 24fps captioned explainer with seven timed scenes, existing hero imagery, original ambient sound and a watch-the-build ending. Planned integrations are labelled; the current prototype is described as brief/review persistence. Video, captions and storyboard are in `../aegntic-explainer-45s/`. Full decode and representative-frame checks passed. This is a review cut with no spoken narration; no publication or project approval was recorded.
+
+## 2026-10-16 — Narrated explainer
+
+Added a local Kokoro voiceover across seven scenes, with music ducking and English subtitles. HeyGen required reauthentication; no remote speech job was created. Narrated MP4 and narration WAV are in `../aegntic-explainer-45s/`. Original cut preserved. Timing, signal-presence and full-decode checks passed.
