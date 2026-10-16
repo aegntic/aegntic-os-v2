@@ -12,7 +12,7 @@ test("brief and review survive closing and reopening the database", () => {
   const filename = file(); let store = openStore(filename); const created = store.create(payload, "restart-case").project;
   store.review(created.id, "C2", { status: "pass", evidence: "Browser request inspection: no remote assets." }); store.close();
   store = openStore(filename);
-  try { expect(store.project(created.id).reviews.find((r) => r.control === "C2").evidence).toContain("no remote assets"); expect(store.list()).toHaveLength(1); expect(store.project(created.id).execution).toBe("NOT_CONNECTED"); } finally { store.close(); }
+  try { expect(store.project(created.id).reviews.find((r) => r.control === "C2").evidence).toContain("no remote assets"); expect(store.list()).toHaveLength(1); expect(store.project(created.id).execution).toBe("NOT_STARTED"); } finally { store.close(); }
 });
 test("retries are idempotent and cannot overwrite a different brief", () => {
   const store = openStore(":memory:");

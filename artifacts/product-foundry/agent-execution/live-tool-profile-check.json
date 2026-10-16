@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "offeredTools": [
+    "bash",
+    "edit",
+    "read",
+    "write"
+  ],
+  "lookupMatchesSavedSubmission": true
+}

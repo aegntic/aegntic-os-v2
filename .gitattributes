@@ -1,0 +1,2 @@
+# Unified patches retain blank context lines containing one literal space.
+integrations/pi-durable/provider-support.patch whitespace=-blank-at-eol

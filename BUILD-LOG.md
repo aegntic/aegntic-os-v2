@@ -29,3 +29,7 @@ Produced a 1920×1080 / 24fps captioned explainer with seven timed scenes, exist
 ## 2026-10-16 — Narrated explainer
 
 Added a local Kokoro voiceover across seven scenes, with music ducking and English subtitles. HeyGen required reauthentication; no remote speech job was created. Narrated MP4 and narration WAV are in `../aegntic-explainer-45s/`. Original cut preserved. Timing, signal-presence and full-decode checks passed.
+
+## 2026-10-16 — Agent execution
+
+Connected actual Pi Durable / Codex execution, with persisted run/session/submission identity, real provider and filesystem qualification, creative approval gating, recovery-only lookup and confirmed-stop semantics. Added supervised startup and retained upstream MIT notice. App19tests231assertions and upstream10tests passed. No user project approved or dispatched.

@@ -48,3 +48,7 @@ The owner's proposed community/commercial policy allows personal and eligible st
 ## Creative kickoff
 
 Four material/aesthetic examples now precede the brief. Every project requires a saved, explicitly approved social graphics and 30–60 second teaser package before execution. Changing the package revokes approval. See [creative kickoff](CREATIVE-KICKOFF.md). Final assets are not produced or verified by the local app; operator references are recorded.
+
+## Connected execution
+
+Pi Durable now runs approved briefs locally with the existing Codex sign-in (gpt-6.1-sol). Open agent execution beside a saved brief. Start/reconnect, refresh, stop and final results are available. See [execution setup and limits](EXECUTION.md).

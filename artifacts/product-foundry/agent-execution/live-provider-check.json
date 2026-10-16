@@ -1,0 +1,11 @@
+{
+  "apiVersion": 1,
+  "durableVersion": "1.0.3",
+  "provider": "openai-codex",
+  "model": "gpt-6.1-sol",
+  "sessionId": "8dfbd9fa-78f4-4e33-8775-f6c9abd2ea85",
+  "submissionId": 10,
+  "status": "done",
+  "answer": "AEGNTIC_EXECUTION_OK",
+  "exactConfirmation": true
+}

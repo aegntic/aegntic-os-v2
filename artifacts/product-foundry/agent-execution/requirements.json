@@ -1,0 +1,44 @@
+[
+  {
+    "id": "E01-real-model-and-tools",
+    "owner_unit": "pi-device",
+    "priority": "required",
+    "phase": "execution",
+    "protocol_id": "pi-v1-aegntic-recovery-1"
+  },
+  {
+    "id": "E02-approval-before-dispatch",
+    "owner_unit": "host",
+    "priority": "required",
+    "phase": "execution",
+    "protocol_id": "pi-v1-aegntic-recovery-1"
+  },
+  {
+    "id": "E03-idempotency-and-recovery",
+    "owner_unit": "host-and-pi",
+    "priority": "required",
+    "phase": "execution",
+    "protocol_id": "pi-v1-aegntic-recovery-1"
+  },
+  {
+    "id": "E04-run-display-and-stop",
+    "owner_unit": "ui",
+    "priority": "required",
+    "phase": "execution",
+    "protocol_id": "pi-v1-aegntic-recovery-1"
+  },
+  {
+    "id": "E05-no-browser-credentials",
+    "owner_unit": "transport",
+    "priority": "required",
+    "phase": "execution",
+    "protocol_id": "pi-v1-aegntic-recovery-1"
+  },
+  {
+    "id": "E06-license-and-runtime-provenance",
+    "owner_unit": "integration",
+    "priority": "required",
+    "phase": "execution",
+    "protocol_id": "pi-v1-aegntic-recovery-1"
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "run_id": "agent-execution",
+  "workflow": {
+    "name": "product-foundry",
+    "version": "0.1.0+codex.20260905040946",
+    "entrypoint_sha256": "afff803cc266e7a49f0abd9201085ae5f7e422b0199dc23449de72850299907f"
+  },
+  "objective": "Connect approved project briefs to actual Pi Durable execution",
+  "baseline_revision": "c6c8a26",
+  "constraints": [
+    "Pi owns execution recovery",
+    "Convex remains shared-data authority when connected",
+    "local trusted single user",
+    "preserve upstream Node/npm/lockfiles",
+    "no user project approval fabricated"
+  ],
+  "authorized_actions": [
+    "local implementation and dependency installation required for connection",
+    "bounded real model/tool qualification",
+    "local source commits"
+  ],
+  "budget": {
+    "initial_candidate_revisions": 2,
+    "additional_repairs": "Concrete recovery/cancellation findings repaired and regression tested"
+  },
+  "stage": "handoff",
+  "status": "PASS",
+  "user_project_dispatch": "NOT_RUN",
+  "artifacts": [
+    "contract.md",
+    "requirements.json",
+    "plan.md",
+    "evidence.md",
+    "live-provider-check.json",
+    "live-execution-qualification.json",
+    "component-record.json",
+    "handoff.md",
+    "connected-workspace.png",
+    "completed-test-run.png",
+    "live-tool-profile-check.json"
+  ],
+  "next_action": "User chooses/approves a launch kit and starts a brief through execution panel"
+}

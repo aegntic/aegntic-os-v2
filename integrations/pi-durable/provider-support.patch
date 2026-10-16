@@ -1,0 +1,214 @@
+diff --git i/apps/dpi-backend/src/config.ts w/apps/dpi-backend/src/config.ts
+index f5036a6..e098452 100644
+--- i/apps/dpi-backend/src/config.ts
++++ w/apps/dpi-backend/src/config.ts
+@@ -13,7 +13,7 @@ export interface BackendConfig {
+   envFile: string;
+   dataDir: string;
+   startDirs: string[];
+-  provider: "openrouter" | "faux";
++  provider: "openrouter" | "anthropic" | "codex" | "faux";
+   token: string;
+ }
+ 
+@@ -41,7 +41,7 @@ export function loadConfig(argv = process.argv.slice(2), env = process.env): Bac
+       .split(":")
+       .filter(Boolean)
+       .map((p) => resolve(expand(p))),
+-    provider: (env.DPI_PROVIDER ?? "openrouter") === "faux" ? "faux" : "openrouter",
++    provider: env.DPI_PROVIDER === "faux" ? "faux" : env.DPI_PROVIDER === "anthropic" ? "anthropic" : env.DPI_PROVIDER === "codex" ? "codex" : "openrouter",
+     token: env.DPI_TOKEN ?? "",
+   };
+   if (!Number.isInteger(config.port) || config.port < 1 || config.port > 65535)
+diff --git i/apps/dpi-backend/src/routes.ts w/apps/dpi-backend/src/routes.ts
+index 338eee6..beec143 100644
+--- i/apps/dpi-backend/src/routes.ts
++++ w/apps/dpi-backend/src/routes.ts
+@@ -153,6 +153,7 @@ export function v1(store: Store) {
+   );
+   r.post(`${a}/abort`, route(async (req, res) => res.json(await store.abort(L(res).c, req.body?.background === true))));
+   r.post(`${a}/fork`, create, route(async (req, res) => res.status(201).json(await store.fork(L(res).row, L(res).c, req.body ?? {}))));
++  r.get(`${a}/submissions/by-request/:requestId`, route(async (req, res) => res.json(await store.lookupSubmission(L(res).h, L(res).c, param(req, "requestId")))));
+   r.get(`${a}/config`, route(async (_req, res) => res.json((await store.agentDetail(L(res).row, L(res).c)).config)));
+   r.patch(`${a}/config`, route(async (req, res) => res.json(await store.configure(L(res).row, L(res).c, req.body ?? {}))));
+   r.get(`${a}/extensions`, route(async (_req, res) => res.json(await store.extensionsOf(L(res).row, L(res).c))));
+diff --git i/apps/dpi-backend/src/store.ts w/apps/dpi-backend/src/store.ts
+index 313accd..5becc18 100644
+--- i/apps/dpi-backend/src/store.ts
++++ w/apps/dpi-backend/src/store.ts
+@@ -38,6 +38,8 @@ import { homedir, hostname, platform } from "node:os";
+ import { randomUUID } from "node:crypto";
+ import { BACKGROUND_CONTEXT as ctx, withAbortSignal } from "@earendil-works/chord/context";
+ import { createModels } from "@earendil-works/pi-ai/models";
++import { openaiCodexProvider } from "@earendil-works/pi-ai/providers/openai-codex";
++import { anthropicProvider } from "@earendil-works/pi-ai/providers/anthropic";
+ import { openrouterProvider } from "@earendil-works/pi-ai/providers/openrouter";
+ import { curatedModels, defaultModelId } from "./model-catalog.js";
+ import { fauxModels, installFaux } from "./faux.js";
+@@ -90,7 +92,7 @@ export interface StoreOptions {
+   dataDir: string;
+   startDirs: string[];
+   name: string;
+-  provider: "openrouter" | "faux";
++  provider: "openrouter" | "anthropic" | "codex" | "faux";
+ }
+ 
+ /** Agent documents a client may read or stream, by kind. */
+@@ -178,6 +180,31 @@ export class Store {
+ 
+   private constructor(readonly options: StoreOptions) {
+     if (options.provider === "faux") installFaux(this.models);
++    else if (options.provider === "codex") {
++      const provider = openaiCodexProvider();
++      this.models.setProvider({ ...provider, auth: { apiKey: {
++        name: "Existing Codex desktop sign-in (read only)",
++        login: async () => { throw Error("Sign in through Codex, then reconnect."); },
++        resolve: async ({ signal }) => {
++          signal.throwIfAborted();
++          const auth = JSON.parse(readFileSync(process.env.DPI_CODEX_AUTH_FILE ?? join(homedir(), ".codex/auth.json"), "utf8"));
++          const access = auth.tokens?.access_token;
++          if (typeof access !== "string") throw Error("No Codex access credential. Sign in through Codex.");
++          const claims = JSON.parse(Buffer.from(access.split(".")[1] ?? "", "base64url").toString());
++          if (!(claims.exp * 1000 > Date.now() + 60000)) throw Error("Codex sign-in needs refresh through the desktop app.");
++          return { auth: { apiKey: access }, source: "Existing Codex sign-in; token file is never changed" };
++        },
++      } } });
++    }
++    else if (options.provider === "anthropic") {
++      const provider = anthropicProvider();
++      const baseUrl = process.env.ANTHROPIC_BASE_URL;
++      if (baseUrl) {
++        const url = new URL(baseUrl);
++        if (url.username || url.password || url.search || url.hash || (url.protocol !== "https:" && !(url.protocol === "http:" && ["127.0.0.1", "localhost", "[::1]"].includes(url.hostname)))) throw Error("Anthropic endpoint must be HTTPS or loopback HTTP without embedded credentials.");
++      }
++      this.models.setProvider(baseUrl ? { ...provider, baseUrl, getModels: () => provider.getModels().map((model) => ({ ...model, baseUrl })) } : provider);
++    }
+     else {
+       const provider = openrouterProvider();
+       const catalog = provider.getModels();
+@@ -251,6 +278,7 @@ export class Store {
+       hostname: hostname(),
+       platform: `${platform()}-${process.arch} node ${process.version}`,
+       apiVersion: 1,
++      aegnticRecovery: 1,
+       durableVersion: DURABLE_VERSION,
+       startedAt: this.startedAt,
+       startDirs: this.startDirs,
+@@ -264,6 +292,12 @@ export class Store {
+   }
+ 
+   private defaultModel() {
++    if (this.options.provider === "anthropic" || this.options.provider === "codex") {
++      const catalog = this.models.getModels(this.options.provider === "codex" ? "openai-codex" : "anthropic");
++      const model = catalog.find((m) => m.id === process.env.DPI_MODEL) ?? catalog.find((m) => m.id === (this.options.provider === "codex" ? "gpt-6.1-sol" : "claude-haiku-4-5")) ?? catalog[0];
++      if (!model) throw Error("No model available; configure provider credentials.");
++      return model.id;
++    }
+     return this.options.provider === "faux" ? fauxModels[0].id : defaultModelId;
+   }
+ 
+@@ -279,6 +313,11 @@ export class Store {
+         reasoning: false,
+         cost: { input: 0, output: 0 },
+       }));
++    if (this.options.provider === "anthropic" || this.options.provider === "codex") {
++      const provider = this.options.provider === "codex" ? "openai-codex" : "anthropic";
++      const available = await this.models.getAvailable(provider, { signal: AbortSignal.timeout(10000) });
++      return available.map((m) => ({ id: m.id, provider, name: m.name, tier: "", icon: "anthropic.png", contextWindow: m.contextWindow, reasoning: m.reasoning, cost: { input: m.cost.input, output: m.cost.output } }));
++    }
+     const available = await this.models.getAvailable("openrouter", { signal: AbortSignal.timeout(10000) });
+     return curatedModels.flatMap((c) => {
+       const m = available.find((m) => m.id === c.id);
+@@ -304,6 +343,7 @@ export class Store {
+       const id = fauxModels.some((m) => m.id === model?.modelId) ? model!.modelId : fauxModels[0].id;
+       return { provider: "faux", modelId: id };
+     }
++    if (this.options.provider === "anthropic" || this.options.provider === "codex") return { provider: this.options.provider === "codex" ? "openai-codex" : "anthropic", modelId: model && this.models.getModel(this.options.provider === "codex" ? "openai-codex" : "anthropic", model.modelId) ? model.modelId : this.defaultModel() };
+     const exact = model?.provider === "openrouter" ? model.modelId : `${model?.provider}/${model?.modelId}`;
+     return {
+       provider: "openrouter",
+@@ -318,7 +358,9 @@ export class Store {
+     const known =
+       this.options.provider === "faux"
+         ? m.provider === "faux" && fauxModels.some((f) => f.id === m.modelId)
+-        : m.provider === "openrouter" &&
++        : this.options.provider === "anthropic" || this.options.provider === "codex"
++          ? m.provider === (this.options.provider === "codex" ? "openai-codex" : "anthropic") && this.modelList.some((model) => model.id === m.modelId)
++          : m.provider === "openrouter" &&
+           curatedModels.some((c) => c.id === m.modelId) &&
+           !!this.models.getModel(m.provider, m.modelId);
+     if (!known) throw invalid(`Unknown model ${m.provider}/${m.modelId}. Choose one from GET /v1/device models`);
+@@ -777,8 +819,12 @@ export class Store {
+     }
+     if (body.readOnly !== undefined && typeof body.readOnly !== "boolean") throw invalid("readOnly must be a boolean");
+     // Read only filters the agent's tools: the model is never offered the ones that create, update or delete.
++    if (body.toolProfile !== undefined && body.toolProfile !== "aegntic-coding") throw invalid("Unknown tool profile");
++    const codingTools = new Set(["read", "write", "edit", "bash"]);
+     const tools =
+-      body.readOnly === true
++      body.toolProfile === "aegntic-coding"
++        ? { tools: { remove: (await this.toolsOf(c)).all.filter((t) => !codingTools.has(t.name)) } }
++        : body.readOnly === true
+         ? { tools: { remove: (await this.toolsOf(c)).all.filter((t) => WRITE_TOOLS.has(t.name)) } }
+         : body.readOnly === false
+           ? { tools: null }
+@@ -837,6 +883,12 @@ export class Store {
+     return { submissionId, status: record.status === "queued" ? "queued" : "pending" };
+   }
+ 
++  async lookupSubmission(h: Harness, c: Conversation, requestId: string) {
++    if (!requestId || requestId.length > 128) throw invalid("requestId must contain 1–128 characters");
++    const submission = await h.commit((tx) => tx.submissionByRequest(c.id, requestId), ctx);
++    return { submissionId: submission?.id ?? null };
++  }
++
+   async abort(c: Conversation, background: boolean) {
+     await c.abort(ctx, { background });
+     return { ok: true as const };
+diff --git i/apps/dpi-backend/tests/store.test.ts w/apps/dpi-backend/tests/store.test.ts
+index 1ceecf3..ae3c2c8 100644
+--- i/apps/dpi-backend/tests/store.test.ts
++++ w/apps/dpi-backend/tests/store.test.ts
+@@ -257,3 +257,29 @@ test("read only: the agent is offered only tools that read; turning it off resto
+     await t.cleanup();
+   }
+ });
++
++test("Aegntic Codex catalog reopens sessions before availability is loaded and keeps the coding profile", async () => {
++  const t = await tempStore();
++  const authFile = join(t.root, "codex-fixture.json");
++  const previous = process.env.DPI_CODEX_AUTH_FILE;
++  // Synthetic auth metadata only: no model call or external credential is used.
++  const payload = Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 3600 })).toString("base64url");
++  await (await import("node:fs/promises")).writeFile(authFile, JSON.stringify({ tokens: { access_token: `fixture.${payload}.fixture` } }), { mode: 0o600 });
++  process.env.DPI_CODEX_AUTH_FILE = authFile;
++  const { Store: RuntimeStore } = await import("../src/store.js");
++  const options = { ...t.options, provider: "codex" as const };
++  let store = await RuntimeStore.open(options);
++  try {
++    const model = store.deviceInfo().defaultModel;
++    const session = await store.create({ name: "Codex restart fixture", cwd: t.work, model: { provider: "openai-codex", modelId: model } });
++    await store.close(); store = await RuntimeStore.open(options);
++    const main = await store.resolveAgent(session.id, "main");
++    await store.configure(main.row, main.c, { readOnly: false, toolProfile: "aegntic-coding" });
++    const offered = (await store.agentDetail(main.row, main.c)).tools.filter((tool) => tool.offered).map((tool) => tool.name).sort();
++    assert.deepEqual(offered, ["bash", "edit", "read", "write"]);
++    assert.deepEqual(await store.lookupSubmission(main.h, main.c, "not-admitted"), { submissionId: null });
++  } finally {
++    await store.close(); await t.cleanup();
++    if (previous === undefined) delete process.env.DPI_CODEX_AUTH_FILE; else process.env.DPI_CODEX_AUTH_FILE = previous;
++  }
++});
+diff --git i/apps/dpi-sdk/src/api.ts w/apps/dpi-sdk/src/api.ts
+index 686c58c..06d3d89 100644
+--- i/apps/dpi-sdk/src/api.ts
++++ w/apps/dpi-sdk/src/api.ts
+@@ -61,6 +61,8 @@ export interface DeviceInfo {
+   hostname: string;
+   platform: string;
+   apiVersion: typeof API_VERSION;
++  /** Aegntic additive read-only request recovery endpoint. */
++  aegnticRecovery?: 1;
+   durableVersion: string;
+   startedAt: number;
+   /** Where new sessions start: the directory browser opens here, relative cwds resolve against the first. */

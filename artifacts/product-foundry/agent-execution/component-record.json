@@ -1,0 +1,19 @@
+{
+  "component": "pi-v1-execution-adapter",
+  "scope": "local approved brief to one real durable agent session",
+  "provenance": "disler/durable-pi pinned source; pi packages1.0.3; user execution request",
+  "evidence": [
+    "live-execution-qualification.json",
+    "live-provider-check.json",
+    "evidence.md"
+  ],
+  "regressions": [
+    "lost accepted response followed by creative revocation remains recoverable/stoppable",
+    "stale Stop never targets newer run",
+    "negative lookup cannot prove cancellation",
+    "failed withdrawal preserves durable stop intent"
+  ],
+  "measured_benefit": "Real model/file round trip, retry identity and restart result persistence verified; no general speed or benchmark claim",
+  "freshness_trigger": "Pi contract/version/provider patch, auth format, model availability or stop semantics change",
+  "rollback": "stop supervisor; revert integration code; retain DBs and reconcile upstream active work before rollback"
+}

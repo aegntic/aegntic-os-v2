@@ -11,6 +11,7 @@
     "test": "bun test",
     "lint": "bun build src/server.js --target=bun --outdir=/tmp/aegntic-os-v2-check && bun build public/app.js --target=browser --outdir=/tmp/aegntic-os-v2-browser-check",
     "build": "bun build src/server.js --target=bun --outdir=dist && bun build public/app.js --target=browser --outdir=dist/public",
-    "test:browser": "bun tests/browser-smoke.cjs"
+    "test:browser": "bun tests/browser-smoke.cjs",
+    "start:connected": "bun integrations/pi-durable/launch.js"
   }
 }

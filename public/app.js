@@ -58,7 +58,7 @@ function renderKickoff() {
   creativeDirty = !c.aesthetic && Boolean(previewAesthetic);
   $("creative-confirm").checked = false;
   $("approve-creative").disabled = creativeDirty || creativeBusy || Boolean(c.approvedAt);
-  $("kickoff-summary").textContent = c.approvedAt ? "Launch kit approved. Execution still requires a connected worker; nothing has been dispatched." : "Build held at creative kickoff. Choose a direction and review the final launch assets.";
+  $("kickoff-summary").textContent = c.approvedAt ? "Launch kit approved. Open agent execution when you are ready to start." : "Build held at creative kickoff. Choose a direction and review the final launch assets.";
 }
 function creativePayload() {
   const payload = { revision: creativeDisplayedRevision };
@@ -107,12 +107,13 @@ function renderProjects() {
   if (!state.projects.length) { $("project-list").replaceChildren(el("div", "No saved briefs yet. Start with one clear, useful outcome.", "empty")); return; }
   $("project-list").replaceChildren(...state.projects.map((project) => {
     const item = el("article", undefined, "project"); const info = el("div");
-    info.append(el("small", "BRIEF SAVED · EXECUTION NOT CONNECTED"), el("h3", project.title), el("p", project.objective));
+    info.append(el("small", `BRIEF SAVED · ${project.run?.state || "NOT STARTED"}`), el("h3", project.title), el("p", project.objective));
     const button = el("button", "Open pre-launch review", "quiet"); button.type = "button";
     button.onclick = () => { activeProject = project.id; renderReview(); $("review").scrollIntoView({ block: "start" }); };
     const kickoff = el("button", project.creativeReady ? "Review approved launch kit" : "Open creative kickoff", "quiet"); kickoff.type = "button";
     kickoff.onclick = () => openCreative(project.id);
-    const actions = el("div", undefined, "project-actions"); actions.append(kickoff, button);
+    const actions = el("div", undefined, "project-actions"); const execute = el("button", "Open agent execution", "quiet"); execute.type = "button"; execute.onclick = () => openExecution(project.id);
+    actions.append(kickoff, execute, button);
     item.append(info, actions); return item;
   }));
 }
@@ -147,6 +148,53 @@ function renderReview() {
 function updateReviewSummary(project) {
   $("review-summary").textContent = project.reviewComplete ? "All six review records are complete. Operator supplied; independent verification and a separate delivery decision remain. Nothing has been released." : "Review incomplete. Every control needs evidence or an applicability reason; unresolved controls stay visible.";
 }
+let executionProject; let executionRevision; let executionDisplayedRunId; let executionBusy = false; let executionRequest = 0; let executionTimer;
+const liveRun = (run) => run && ["PREPARING", "ADMITTING", "QUEUED", "RUNNING", "STOP_UNCONFIRMED"].includes(run.state);
+function renderExecution() {
+  const project = state.projects.find((p) => p.id === executionProject);
+  $("execution-panel").hidden = !project; if (!project) return;
+  executionRevision = project.creative.revision;
+  const run = project.run; executionDisplayedRunId = run?.id;
+  $("execution-title").textContent = `Agent execution / ${project.title}`;
+  $("execution-status").textContent = run ? `${run.state.replaceAll("_", " ")} · ${run.model.name || run.model.id}${run.error ? ` — ${run.error}` : ""}` : project.creativeReady ? "Ready for a connection check and dispatch." : "Choose and approve the current creative package before starting.";
+  $("execution-output").textContent = run?.result || "No final answer recorded yet.";
+  $("execution-location").textContent = run ? `Project folder: ${run.cwd} · Run ${run.id}` : "A separate local project folder will be created when dispatch starts.";
+  $("start-execution").disabled = executionBusy || !project.creativeReady || Boolean(run && ["DONE", "FAILED", "ABORTED", "ADMITTING", "QUEUED", "RUNNING", "STOP_UNCONFIRMED"].includes(run.state) && run.creativeRevision === project.creative.revision);
+  $("start-execution").textContent = run && run.submissionId === null ? "Reconnect saved dispatch" : "Start approved brief";
+  $("refresh-execution").disabled = executionBusy || !run;
+  $("abort-execution").disabled = executionBusy || !run || ["DONE", "FAILED", "ABORTED"].includes(run.state);
+}
+async function openExecution(id) {
+  if (executionBusy) return;
+  clearTimeout(executionTimer); const request = ++executionRequest;
+  try {
+    const [result, connection] = await Promise.all([api(`/api/projects/${id}`), api("/api/execution/connection")]);
+    if (request !== executionRequest) return;
+    state.projects = state.projects.map((p) => p.id === id ? result.project : p); executionProject = id;
+    $("execution-connection").textContent = connection.status === "CONNECTED" ? `Connected to ${connection.deviceName} · ${connection.model.name}. A run can use your model account and modify files on this machine.` : `${connection.status.replaceAll("_", " ")} — ${connection.detail}`;
+    renderExecution(); $("execution-panel").scrollIntoView({ block: "start" }); $("execution-title").focus({ preventScroll: true }); scheduleRunRefresh();
+  } catch (error) { notice(error.message); }
+}
+function scheduleRunRefresh() {
+  clearTimeout(executionTimer);
+  const run = state.projects.find((p) => p.id === executionProject)?.run;
+  if (liveRun(run)) executionTimer = setTimeout(() => updateExecution("refresh", true), 3000);
+}
+async function updateExecution(action, quiet = false) {
+  if (executionBusy || !executionProject) return;
+  const id = executionProject; const requestedRunId = executionDisplayedRunId; const requestedRevision = executionRevision; let succeeded = false; executionBusy = true; renderExecution();
+  try {
+    const path = action === "start" ? `/api/projects/${id}/execute` : `/api/projects/${id}/execution${action === "abort" ? "/abort" : ""}`;
+    const result = await api(path, action === "refresh" ? undefined : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(action === "start" ? { revision: requestedRevision } : { runId: requestedRunId }) });
+    state.projects = state.projects.map((p) => p.id === id ? result.project : p); renderProjects(); succeeded = true;
+    if (!quiet) notice(action === "abort" ? (["ABORTED", "DONE"].includes(result.run.state) ? "Pi confirmed this run's stop or completion." : "Stop is not confirmed yet. Refresh will check and stop late-arriving work.") : action === "start" ? "Dispatch saved. Pi owns execution and recovery; inspect its status below." : "Run status refreshed from Pi.");
+  } catch (error) { notice(error.message); }
+  finally { executionBusy = false; if (executionProject === id) renderExecution(); if (succeeded) scheduleRunRefresh(); }
+}
+$("start-execution").onclick = () => updateExecution("start");
+$("refresh-execution").onclick = () => updateExecution("refresh");
+$("abort-execution").onclick = () => updateExecution("abort");
+$("close-execution").onclick = () => { if (executionBusy) return; clearTimeout(executionTimer); ++executionRequest; executionProject = undefined; renderExecution(); };
 function renderCapabilities() {
   $("capabilities").replaceChildren(...state.capabilities.map((capability) => { const card = el("div", undefined, "connection"); card.append(el("span", capability.status.replaceAll("_", " ")), el("strong", capability.name), el("p", capability.detail)); return card; }));
 }
@@ -163,7 +211,7 @@ $("brief").onsubmit = async (event) => {
     renderProjects();
     if (!creativeBusy) { ++creativeOpenRequest; creativeProject = result.project.id; renderKickoff(); $("kickoff").scrollIntoView({ block: "start" }); $("kickoff-title").focus({ preventScroll: true }); }
     pendingSubmission = undefined;
-    notice("Brief saved on this machine. Execution is not connected; nothing has been dispatched."); if (JSON.stringify({ title: $("title").value, outcome: selected, objective: $("objective").value }) === serialized) $("brief").reset();
+    notice("Brief saved. Review its launch kit, then open agent execution. Nothing has been dispatched."); if (JSON.stringify({ title: $("title").value, outcome: selected, objective: $("objective").value }) === serialized) $("brief").reset();
   } catch (error) { notice(error.message); } finally { briefBusy = false; button.disabled = false; }
 };
 $("close-review").onclick = () => { activeProject = undefined; renderReview(); };

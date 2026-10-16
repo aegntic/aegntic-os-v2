@@ -22,3 +22,7 @@ Implemented locally: four aesthetic previews, original mark, saved launch-kit dr
 ## 2026-10-15 — Hero and layout studies
 
 Four full-page hero/layout studies are now available. Next: user chooses or combines a direction, then produce the social masters and 30–60 second teaser for approval.
+
+## 2026-10-16 — Execution connected
+
+Implemented: Pi v1 real model/tools, durable identity projection, start/reconnect/refresh/stop UI and qualified Codex account connection. Next: selected launch-kit production and user approval; shared Convex projection, isolated worker deployment and streaming output remain future work.

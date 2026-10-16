@@ -43,15 +43,29 @@ export function openStore(filename) {
     CREATE TABLE IF NOT EXISTS projects (id TEXT PRIMARY KEY, title TEXT NOT NULL, outcome TEXT NOT NULL, objective TEXT NOT NULL, created_at TEXT NOT NULL, request_key TEXT NOT NULL UNIQUE, payload_hash TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS reviews (project_id TEXT NOT NULL REFERENCES projects(id), control TEXT NOT NULL, status TEXT NOT NULL, evidence TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(project_id, control));
     CREATE TABLE IF NOT EXISTS creative (project_id TEXT PRIMARY KEY REFERENCES projects(id), revision INTEGER NOT NULL, payload TEXT NOT NULL, approved_at TEXT);
+    CREATE TABLE IF NOT EXISTS runs (id TEXT PRIMARY KEY,project_id TEXT NOT NULL REFERENCES projects(id),creative_revision INTEGER NOT NULL,device_uid TEXT NOT NULL,model TEXT NOT NULL,cwd TEXT NOT NULL,prompt TEXT NOT NULL,session_id TEXT,submission_id INTEGER,state TEXT NOT NULL,result TEXT NOT NULL DEFAULT '',error TEXT NOT NULL DEFAULT '',created_at TEXT NOT NULL,updated_at TEXT NOT NULL,UNIQUE(project_id,creative_revision));
     CREATE TABLE IF NOT EXISTS events (sequence INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT NOT NULL REFERENCES projects(id), kind TEXT NOT NULL, created_at TEXT NOT NULL);
   `);
+  if (!db.query("PRAGMA table_info(runs)").all().some((column) => column.name === "send_attempted")) db.exec("ALTER TABLE runs ADD COLUMN send_attempted INTEGER NOT NULL DEFAULT 0");
   function project(id) {
     const record = db.query("SELECT id,title,outcome,objective,created_at FROM projects WHERE id=?").get(id);
     if (!record) throw new InputError("Project not found.", 404);
     const reviews = db.query("SELECT control,status,evidence,updated_at FROM reviews WHERE project_id=? ORDER BY control").all(id);
     const creativeRecord = db.query("SELECT revision,payload,approved_at FROM creative WHERE project_id=?").get(id);
     const creative = creativeRecord ? { ...JSON.parse(creativeRecord.payload), revision: creativeRecord.revision, approvedAt: creativeRecord.approved_at } : { revision: 0, aesthetic: "", cta: "join-waitlist", destination: "", graphics: "", video: "", duration: 45, approvedAt: null };
-    return { ...record, creative, creativeReady: Boolean(creative.approvedAt), reviews, reviewComplete: reviews.length === controls.length && reviews.every((r) => ["pass", "not-applicable"].includes(r.status)), execution: "NOT_CONNECTED", delivery: "NOT_RUN" };
+    const latest = latestRun(id);
+    return { ...record, run: latest, creative, creativeReady: Boolean(creative.approvedAt), reviews, reviewComplete: reviews.length === controls.length && reviews.every((r) => ["pass", "not-applicable"].includes(r.status)), execution: latest?.state || "NOT_STARTED", delivery: "NOT_RUN" };
+  }
+  function run(id) {
+    const record = db.query("SELECT * FROM runs WHERE id=?").get(id);
+    if (!record) throw new InputError("Run not found.", 404);
+    return { id: record.id, projectId: record.project_id, creativeRevision: record.creative_revision, deviceUid: record.device_uid, model: JSON.parse(record.model), cwd: record.cwd, prompt: record.prompt, sessionId: record.session_id, submissionId: record.submission_id, sendAttempted: Boolean(record.send_attempted), state: record.state, result: record.result, error: record.error, createdAt: record.created_at, updatedAt: record.updated_at };
+  }
+  function latestRun(projectId) { const record = db.query("SELECT id FROM runs WHERE project_id=? ORDER BY rowid DESC LIMIT 1").get(projectId); return record ? run(record.id) : null; }
+  function checkApproval(id, revision) {
+    const p = project(id);
+    if (!p.creativeReady || p.creative.revision !== revision) throw new InputError("Choose and approve the current creative package before building.", 409);
+    return p;
   }
   return {
     create(input, requestKey) {
@@ -119,6 +133,32 @@ export function openStore(filename) {
         db.query("UPDATE creative SET approved_at=? WHERE project_id=?").run(new Date().toISOString(), id);
         db.query("INSERT INTO events(project_id,kind,created_at) VALUES (?,?,?)").run(id, "creative.approved", new Date().toISOString());
         return project(id);
+      })();
+    },
+    checkApproval,
+    run,
+    latestRun,
+    reserveRun(id, revision, deviceUid, model, workspace) {
+      return db.transaction(() => {
+        const p = checkApproval(id, revision);
+        const existing = db.query("SELECT id FROM runs WHERE project_id=? AND creative_revision=?").get(id, revision);
+        if (existing) return run(existing.id);
+        const active = db.query("SELECT id FROM runs WHERE project_id=? AND state NOT IN ('DONE','FAILED','ABORTED') LIMIT 1").get(id);
+        if (active) throw new InputError("Finish or stop the earlier project run before dispatching a new revision.", 409);
+        const runId = randomUUID(); const at = new Date().toISOString(); const cwd = workspace(id, revision);
+        const prompt = "Implement this approved project brief in your working directory. Produce useful files and verification evidence. Do not publish or deploy.\n\n" + JSON.stringify({ title: p.title, outcome: p.outcome, objective: p.objective, creative: p.creative }, null, 2);
+        db.query("INSERT INTO runs(id,project_id,creative_revision,device_uid,model,cwd,prompt,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?, 'PREPARING',?,?)").run(runId, id, revision, deviceUid, JSON.stringify(model), cwd, prompt, at, at);
+        db.query("INSERT INTO events(project_id,kind,created_at) VALUES (?,?,?)").run(id, "execution.reserved", at);
+        return run(runId);
+      })();
+    },
+    updateRun(id, input) {
+      exactKeys(input, ["sessionId", "submissionId", "sendAttempted", "state", "result", "error"]);
+      return db.transaction(() => {
+        const current = run(id); const next = { ...current, ...input };
+        db.query("UPDATE runs SET session_id=?,submission_id=?,send_attempted=?,state=?,result=?,error=?,updated_at=? WHERE id=?").run(next.sessionId, next.submissionId, Number(next.sendAttempted), next.state, next.result, next.error, new Date().toISOString(), id);
+        if (next.state !== current.state) db.query("INSERT INTO events(project_id,kind,created_at) VALUES (?,?,?)").run(current.projectId, `execution.${next.state.toLowerCase()}`, new Date().toISOString());
+        return run(id);
       })();
     },
     events(id) { project(id); return db.query("SELECT sequence,kind,created_at FROM events WHERE project_id=? ORDER BY sequence").all(id); },

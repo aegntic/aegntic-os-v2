@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "date": "2026-10-16",
+  "scope": "Isolated qualification DB; not a user project approval",
+  "provider": "openai-codex",
+  "model": "gpt-6.1-sol",
+  "runId": "61027f26-c017-4622-b33c-758198080ab2",
+  "sessionId": "1b17e8b0-a229-4fbb-9f8e-798f5ae4b166",
+  "submissionId": 10,
+  "checks": [
+    "unapproved HTTP dispatch rejected",
+    "real authenticated Pi v1 + recovery extension",
+    "real model + filesystem tool execution",
+    "file contents verified by host",
+    "retry reuses run ID",
+    "result survives application restart"
+  ],
+  "result": "Created `execution-check.txt` with exactly `AEGNTIC_EXECUTION_OK` and a newline. Read it back and verified. No other files created or external services contacted.",
+  "artifact": "execution-check.txt",
+  "artifactContent": "AEGNTIC_EXECUTION_OK\n"
+}
