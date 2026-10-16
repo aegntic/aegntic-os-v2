@@ -56,3 +56,7 @@ Pi Durable now runs approved briefs locally with the existing Codex sign-in (gpt
 ## Integration research
 
 [Cloudroom qualification](CLOUDROOM-QUALIFICATION.md) records the runtime checks and unresolved disk-pressure failure. [Business services](BUSINESS-SERVICES.md) maps CRM, Ghost publishing/newsletters and later customer operations. These are distinct from connected capabilities.
+
+## Assembly launch site
+
+A separate Three.js launch-site review is in [launch-site/](launch-site/README.md). It runs on loopback port 4320, with isolated local signup storage, native/copy sharing, social masters and a 45-second silent teaser review cut. It is not publicly deployed or connected to a mail provider.

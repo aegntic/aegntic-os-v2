@@ -41,3 +41,9 @@ Added the business-services shortlist and first waitlist → CRM → opted-in ne
 ## 2026-10-16 — Cloudroom qualification
 
 Built pinned Cloudroom Core without changing upstream sources/lockfiles. Formatting and Clippy pass; Rust suite has 40 passes and one repeatable disk-pressure writer-selection failure. Four focused HTTP lifecycle checks pass with protocol fixtures. Installed native Pi RPC startup also passes without inference. Evidence and limitations: CLOUDROOM-QUALIFICATION.md. No real model invocation, application adapter or protected remote deployment is claimed; Cloudroom remains NOT_CONNECTED.
+
+## 2026-10-16 — Assembly launch-site review
+
+User selected bright architectural Assembly from three proposed directions. Added a separate Three.js site with procedural chrome/glass object, assembly/pause controls, honest build evidence, builder/follower paths, real local waitlist/removal and share/copy controls. Public rollout remains pending final launch-package review and deployment setup. Kept agent endpoints and credentials outside this service. Produced four social master sizes and a 45-second silent caption-led review cut from the real rendered object. Existing explainer preserved.
+
+Checks: root 21 tests/252 assertions, launch 2 tests/21 assertions, both lint/build checks and supplemental Oxlint pass. Browser checks cover desktop/mobile, WebGL, assembly/pause, synthetic signup/removal and sharing. Review found a native GET-form privacy fallback; fixed with POST/actions, disabled-until-JS buttons and noscript messaging. Three.js MIT notice and lockfile retained. No campaigns sent or real user projects dispatched.
