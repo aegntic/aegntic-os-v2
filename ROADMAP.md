@@ -34,3 +34,7 @@ CRM/newsletter scope added in [BUSINESS-SERVICES.md](BUSINESS-SERVICES.md): Twen
 ## 2026-10-16 — Cloudroom first runtime qualification
 
 See [CLOUDROOM-QUALIFICATION.md](CLOUDROOM-QUALIFICATION.md). Build/lint and focused HTTP lifecycle pass. Disk-pressure writer selection fails reproducibly; resolve and qualify on the intended protected Linux host before adoption. Standard Pi RPC is distinct from our durable-pi HTTP device; a bounded worker adapter and live end-to-end stage remain required. Status remains NOT_CONNECTED.
+
+## 2026-10-16 — Memory and evolution research inputs
+
+Added [MEMORY-AND-EVOLUTION.md](MEMORY-AND-EVOLUTION.md): pinned TencentDB Agent Memory as an alternative memory-service candidate, and SelfSearch as an independent research method for controlled harness evolution. Neither is installed or connected; no performance improvement or relationship between the projects is assumed. Existing Pi ownership, deferred shared Convex projection and GBrain exclusion remain intact.
