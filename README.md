@@ -1,6 +1,6 @@
 # Aegntic OS V2
 
-First working slice: an outcome workspace with persistent local briefs and a six-control pre-launch evidence review. No external model, publication, account, payment or infrastructure operation is enabled.
+Local outcome workspace with persistent briefs, a six-control pre-launch evidence review and real Pi Durable agent execution through an existing Codex sign-in. Publication, payments and cloud deployment remain unconnected.
 
 ## Run locally
 
@@ -23,7 +23,7 @@ Open the local workspace at http://127.0.0.1:4317. The server binds to loopback 
 
 ## Not connected
 
-Pi Durable, Convex, Cloudroom, model providers, Google services, browser/render workers, social publishing and mobile distribution are planned adapters. Calling the execution endpoint returns a not-connected result. This application does not simulate their success. Local brief storage is a temporary development boundary, not a replacement workflow engine or a deployed Convex service. GBrain is excluded from the plan.
+Convex, Cloudroom, additional model providers, Google services, browser/render workers, social publishing and mobile distribution remain planned adapters. Plain `bun start` runs without execution credentials; connected execution requires the separate setup in EXECUTION.md. This application does not simulate unconnected services succeeding. Local brief storage is a temporary development boundary, not a replacement workflow engine or a deployed Convex service. GBrain is excluded from the plan.
 
 ## Verification
 
@@ -33,13 +33,13 @@ bun test
 bun run build
 ```
 
-The project lint script checks server/browser syntax by bundling; supplemental Oxlint was run using the approved local launcher. No ESLint/TypeScript project configuration existed and none was removed. Current evidence: four automated tests, 26 assertions, seven browser checks, and independently reviewed UI repairs. See `artifacts/product-foundry/first-run/evidence.md`.
+The project lint script checks server/browser syntax by bundling; supplemental Oxlint was run using the approved local launcher. No ESLint/TypeScript project configuration existed and none was removed. Current automated checks: 19 tests and 231 assertions, plus server/browser builds. Historical browser and real-model qualification evidence is retained under `artifacts/product-foundry/`. Cloudroom qualification has one documented upstream test failure; see CLOUDROOM-QUALIFICATION.md.
 
 A repeatable browser check is in `tests/browser-smoke.cjs`. Run it against the local app using a separately available Playwright installation; the check adds two labelled test briefs. `AEGNTIC_PLAYWRIGHT_MODULE` can point at an existing installation. Playwright is not auto-installed or a runtime dependency.
 
 ## Build in public
 
-[BUILD-LOG.md](BUILD-LOG.md) records verified changes. [ROADMAP.md](ROADMAP.md) distinguishes working features from future integrations. The repository contains only this new app and its evidence; account-wide research, private sources, personal browser profiles, secrets and local databases stay outside the public source set. Public publication is not yet performed; repository destination and operative licensing are pending.
+[BUILD-LOG.md](BUILD-LOG.md) records verified changes. [ROADMAP.md](ROADMAP.md) distinguishes working features from future integrations. The repository contains only this new app and its evidence; account-wide research, private sources, personal browser profiles, secrets and local databases stay outside the public source set. GitHub destination: https://github.com/aegntic/aegntic-os-v2. Operative licensing remains pending; publishing source does not finalize the proposed license.
 
 ## Licensing
 
@@ -52,3 +52,7 @@ Four material/aesthetic examples now precede the brief. Every project requires a
 ## Connected execution
 
 Pi Durable now runs approved briefs locally with the existing Codex sign-in (gpt-6.1-sol). Open agent execution beside a saved brief. Start/reconnect, refresh, stop and final results are available. See [execution setup and limits](EXECUTION.md).
+
+## Integration research
+
+[Cloudroom qualification](CLOUDROOM-QUALIFICATION.md) records the runtime checks and unresolved disk-pressure failure. [Business services](BUSINESS-SERVICES.md) maps CRM, Ghost publishing/newsletters and later customer operations. These are distinct from connected capabilities.

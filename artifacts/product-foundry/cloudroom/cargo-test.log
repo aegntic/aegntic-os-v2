@@ -1,0 +1,100 @@
+    Blocking waiting for file lock on build directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.12s
+     Running unittests src/lib.rs (target/debug/deps/cloudroom-8ca22902ea279ec2)
+
+running 17 tests
+test observability::system::cpu_minute_counts_ended_processes_once ... ok
+test observability::system::disk_percentage_excludes_reserved_blocks ... ok
+test observability::system::node_processes_show_only_a_valid_package_name ... ok
+test observability::system::cpu_minute_never_keeps_a_double_count ... ok
+test session::history::tests::saved_history_drops_unread_native_lines_and_still_matches_older_rows ... ok
+test observability::tests::local_rotation_preserves_the_previous_file_with_private_permissions ... ok
+test workspace::storage::tests::actual_free_space_warns_without_blocking_and_resumes_below_warning ... ok
+test workspace::storage::tests::a_rescue_resumes_work_until_half_the_space_left_is_used ... ok
+test workspace::storage::tests::missing_or_stale_measurements_do_not_authorize_writes ... ok
+test session::history::tests::gzip_files_are_jsonl_and_the_same_records_give_the_same_bytes ... ok
+test session::state::tests::snapshot_and_newer_records_rebuild_the_full_replay ... ok
+test observability::tests::private_stderr_rejects_unsafe_existing_paths_without_touching_targets ... ok
+test preview::only_the_forwarded_loopback_listener_proves_ownership ... ok
+test observability::tests::private_stderr_rotation_counts_encoded_bytes_and_keeps_two_private_files ... ok
+test observability::tests::api_outage_keeps_local_diagnostics_and_overload_is_visible ... ok
+test observability::system::cpu_minute_sees_real_processes ... ok
+test runtime::linux::tests::a_full_disk_stops_the_writing_tool_command_not_the_harness ... FAILED
+
+failures:
+
+---- runtime::linux::tests::a_full_disk_stops_the_writing_tool_command_not_the_harness stdout ----
+
+thread 'runtime::linux::tests::a_full_disk_stops_the_writing_tool_command_not_the_harness' (2730050) panicked at src/runtime/linux.rs:428:9:
+sleep 30
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    runtime::linux::tests::a_full_disk_stops_the_writing_tool_command_not_the_harness
+
+test result: FAILED. 16 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.25s
+
+error: test failed, to rerun pass `--lib`
+     Running unittests src/main.rs (target/debug/deps/cloudroom-e9bbf2debbd58120)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/adapters.rs (target/debug/deps/adapters-7c7018c51f3fc5bc)
+
+running 5 tests
+test pi_handles_no_run_dialogs_rejection_and_failure ... ok
+test both_harnesses_obey_request_and_shutdown_contract ... ok
+test both_harnesses_drain_large_native_history_before_exit ... ok
+test pi_waits_through_retry_and_preserves_tool_snapshots ... ok
+test pi_native_identity_exists_before_first_prompt_and_resume_never_creates_missing_file ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.64s
+
+     Running tests/journal.rs (target/debug/deps/journal-1eb7e21fc3588034)
+
+running 3 tests
+test pending_records_and_acknowledgements_survive_restart ... ok
+test gaps_and_uncertain_writes_fail_closed ... ok
+test journal_survives_killed_writer ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/runtime.rs (target/debug/deps/runtime-31cbd75ac3d6e47f)
+
+running 13 tests
+test stderr_keeps_bounded_final_bytes_and_separates_concurrent_harnesses ... ok
+test harness_commits_drop_ai_co_authors_and_keep_human_ones ... ok
+test shutdown_cancels_pending_commands_as_uncertain ... ok
+test stderr_survives_stdout_eof_signals_and_clean_shutdown ... ok
+test native_recovery_rejects_links_and_special_files_but_reads_valid_history ... ok
+test turn_notifications_survive_both_rpc_reply_orders ... ok
+test resume_reattaches_and_continues_the_native_rollout ... ok
+test dropping_the_last_handle_stops_its_tools ... ok
+test shutdown_stops_tools_and_records_the_final_native_tail ... ok
+test stdout_eof_does_not_cut_short_tool_cleanup ... ok
+test inherited_stderr_cannot_hold_exit_and_marks_capture_incomplete ... ok
+test workload_cleanup_requires_confirmed_empty_group ... ok
+test unresponsive_harness_is_not_reported_as_cleanly_closed ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.39s
+
+     Running tests/storage.rs (target/debug/deps/storage-392f8047bbc148d0)
+
+running 1 test
+test storage_requires_protected_explicit_policy ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/terminal.rs (target/debug/deps/terminal-332167c5c18ced96)
+
+running 2 tests
+test shell_gets_the_agents_claude_and_codex_logins ... ok
+test shell_runs_on_a_resizable_terminal_and_replays_after_reconnect ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: 1 target failed:
+    `--lib`

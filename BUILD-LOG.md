@@ -33,3 +33,11 @@ Added a local Kokoro voiceover across seven scenes, with music ducking and Engli
 ## 2026-10-16 — Agent execution
 
 Connected actual Pi Durable / Codex execution, with persisted run/session/submission identity, real provider and filesystem qualification, creative approval gating, recovery-only lookup and confirmed-stop semantics. Added supervised startup and retained upstream MIT notice. App19tests231assertions and upstream10tests passed. No user project approved or dispatched.
+
+## 2026-10-16 — CRM and newsletter architecture
+
+Added the business-services shortlist and first waitlist → CRM → opted-in newsletter integration slice. Checked upstream license sources, including Twenty's Enterprise exclusions/application exception and listmonk's AGPL. Defined separate domain ownership, external operation reconciliation and suppression handling. No business-service installation, contact import, campaign send or paid provisioning occurred. This expands the capacity estimate beyond the existing agent worker.
+
+## 2026-10-16 — Cloudroom qualification
+
+Built pinned Cloudroom Core without changing upstream sources/lockfiles. Formatting and Clippy pass; Rust suite has 40 passes and one repeatable disk-pressure writer-selection failure. Four focused HTTP lifecycle checks pass with protocol fixtures. Installed native Pi RPC startup also passes without inference. Evidence and limitations: CLOUDROOM-QUALIFICATION.md. No real model invocation, application adapter or protected remote deployment is claimed; Cloudroom remains NOT_CONNECTED.

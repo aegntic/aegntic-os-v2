@@ -1,0 +1,8 @@
+{
+  "kind": "native Pi RPC startup without inference",
+  "binary_package": "@earendil-works/pi-coding-agent 1.2.0",
+  "exit_code": 0,
+  "get_state_success": true,
+  "model_calls": 0,
+  "credentials_loaded": false
+}

@@ -1,0 +1,9 @@
+test_same_api_queue_interrupt_replay_and_restart (pi_http.MixedHarnessTests.test_same_api_queue_interrupt_replay_and_restart) ... ok
+test_loopback_http_needs_no_permission_and_remains_authenticated (core_fixture.ReplayTests.test_loopback_http_needs_no_permission_and_remains_authenticated) ... ok
+test_graceful_restart_preserves_queue_and_close_settles_it (core_fixture.RecoveryTests.test_graceful_restart_preserves_queue_and_close_settles_it) ... ok
+test_manual_stop_keeps_queue_paused_across_restart_until_resume (core_fixture.RecoveryTests.test_manual_stop_keeps_queue_paused_across_restart_until_resume) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.440s
+
+OK

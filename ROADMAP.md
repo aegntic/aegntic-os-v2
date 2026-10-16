@@ -5,7 +5,7 @@
 | Local outcome briefs and six-control review | PASS | Persistence, retry, validation, HTTP and browser checks |
 | Public-safe build log and source separation | PREPARED | Only new app code/evidence in this repository; local data ignored |
 | GitHub publication and operative license | PENDING | Destination and final license terms |
-| Pi Durable integration | NOT_CONNECTED | Real dispatch/reconnect/cancel/recovery using upstream authority |
+| Pi Durable integration | CONNECTED_LOCAL | Real Codex dispatch, file tools, retry/reconnect/stop and durable identity evidence; trusted single-user only |
 | Convex shared records | NOT_CONNECTED | Configured service, project isolation and reconstructable execution views |
 | Hardened Outcomes evaluator | NOT_IMPLEMENTED | Duplicate-ID, critical-failure, evidence and resource regression cases |
 | Cloudroom and other coding workers | NOT_CONNECTED | Bounded worker receipts and tested process cleanup |
@@ -26,3 +26,11 @@ Four full-page hero/layout studies are now available. Next: user chooses or comb
 ## 2026-10-16 — Execution connected
 
 Implemented: Pi v1 real model/tools, durable identity projection, start/reconnect/refresh/stop UI and qualified Codex account connection. Next: selected launch-kit production and user approval; shared Convex projection, isolated worker deployment and streaming output remain future work.
+
+## 2026-10-16 — Business services shortlist
+
+CRM/newsletter scope added in [BUSINESS-SERVICES.md](BUSINESS-SERVICES.md): Twenty and listmonk first; Chatwoot and Umami later; Mautic optional for more complex journeys. All remain NOT_CONNECTED. Qualification must cover subscription/suppression ownership, webhook replay, ambiguous sends and a local mail sink before real recipients.
+
+## 2026-10-16 — Cloudroom first runtime qualification
+
+See [CLOUDROOM-QUALIFICATION.md](CLOUDROOM-QUALIFICATION.md). Build/lint and focused HTTP lifecycle pass. Disk-pressure writer selection fails reproducibly; resolve and qualify on the intended protected Linux host before adoption. Standard Pi RPC is distinct from our durable-pi HTTP device; a bounded worker adapter and live end-to-end stage remain required. Status remains NOT_CONNECTED.
