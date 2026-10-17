@@ -7,3 +7,17 @@ node_modules/
 *.db
 *.db-shm
 *.db-wal
+
+# Private continuation and credentials must stay outside published source.
+.private/
+private/
+private-continuation/
+credentials/
+PRIVATE-HANDOFF*
+PRIVATE-CONTINUATION*
+*.bundle
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+__pycache__/

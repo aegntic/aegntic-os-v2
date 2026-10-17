@@ -1,0 +1,27 @@
+{
+  "canonical_repository": "https://github.com/aegntic/aegntic-os-v2",
+  "title": "Aegntic OS V2 \u2014 Multi-Agent Workspace, Pi Durable Execution and Creative Approvals",
+  "description": "Build from brief to evidence with Aegntic: a local multi-agent workspace with Pi Durable execution, creative approvals, pre-launch review and a Three.js Assembly launch-site study.",
+  "topics": [
+    "multi-agent",
+    "ai-agents",
+    "agent-orchestration",
+    "durable-execution",
+    "pi-durable",
+    "bun",
+    "sqlite",
+    "creative-workflow",
+    "build-in-public",
+    "threejs",
+    "human-in-the-loop",
+    "workflow-automation",
+    "agent-tools",
+    "local-first"
+  ],
+  "social_preview_candidate": "launch-site/public/social/assembly-landscape.png",
+  "custom_github_social_preview_configured": false,
+  "geographic_tags": null,
+  "geo_meaning": "generative-engine optimization",
+  "public_website_canonical": null,
+  "notes": "Repository metadata reference; no README head/meta tags or deployed website schema claimed."
+}

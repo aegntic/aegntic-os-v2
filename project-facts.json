@@ -1,0 +1,51 @@
+{
+  "name": "Aegntic OS V2",
+  "version": "0.1.0",
+  "updated": "2026-10-17",
+  "category": "Local multi-agent outcome workspace",
+  "description": "Briefs, creative approvals, Pi Durable execution and pre-launch evidence with a separate Assembly launch-site review.",
+  "repository": "https://github.com/aegntic/aegntic-os-v2",
+  "visibility": "public source; private operational continuation excluded",
+  "execution": {
+    "state": "connected-local",
+    "authority": "Pi Durable",
+    "qualified_provider": "Existing Codex sign-in",
+    "shared_application_data": "Convex planned; local SQLite in current prototype"
+  },
+  "launch_site": {
+    "direction": "Assembly",
+    "state": "local review",
+    "public_deployment": false,
+    "email_delivery": false
+  },
+  "recorded_verification": {
+    "date": "2026-10-16",
+    "combined_tests": 21,
+    "assertions": 252,
+    "cloudroom_pass": 40,
+    "cloudroom_fail": 1
+  },
+  "privacy_checks": {
+    "scope": "selected patterns, Git paths, configured local credentials and history",
+    "exhaustive": false,
+    "private_readme_section": false
+  },
+  "licensing": "Operative project license pending; third-party grants preserved",
+  "evidence": [
+    "EXECUTION.md",
+    "BUILD-LOG.md",
+    "ROADMAP.md",
+    "launch-site/evidence/checks.json",
+    "CLOUDROOM-QUALIFICATION.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "planned": [
+    "Convex",
+    "Cloudroom adapter",
+    "additional providers",
+    "Google services",
+    "automation/extraction",
+    "social publishing",
+    "mobile distribution"
+  ]
+}

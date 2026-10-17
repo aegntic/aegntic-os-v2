@@ -55,3 +55,11 @@ Identified the screenshot project and resolved its current default-branch commit
 ## 2026-10-17 — README and third-party notice reconciliation
 
 Updated the application and research READMEs/notices to distinguish connected local execution, separately qualified candidates, Assembly review assets and the earlier narrated explainer. Added preserved Kokoro runtime and DejaVu font notices. Recorded historical verification counts with dates; no new runtime/model tests, publications or deployments performed.
+
+## 17 October 2026 — Visual README and private continuity
+
+Rebuilt the public README with Assembly artwork, seven local SVG graphics, outcome/architecture maps, Mermaid flows, an evidence chart, explicit capability states and a direct-answer FAQ. Added factual search/GEO guidance, repository metadata, public facts and an optional llms.txt index. GitHub controls page metadata; no ranking or AI-citation guarantee is asserted.
+
+Added separate private-continuation instructions, local publication hooks and a pinned GitHub Actions check. The scanner checks indexed content and all reachable commit paths, including a deleted private alias sharing a public blob. Six publication regression tests passed; index/history checks and whitespace checks passed. Independent review approved the corrected scanner. Application behavior was unchanged; prior application results remain dated evidence.
+
+Private checkpoint recovery uses an encrypted local archive and a separately stored key outside this public checkout. Publication checks are defense in depth and do not guarantee detection of every possible sensitive value.

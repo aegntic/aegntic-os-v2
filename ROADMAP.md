@@ -4,7 +4,7 @@
 |---|---|---|
 | Local outcome briefs and six-control review | PASS | Persistence, retry, validation, HTTP and browser checks |
 | Public-safe build log and source separation | PREPARED | Only new app code/evidence in this repository; local data ignored |
-| GitHub publication and operative license | PENDING | Destination and final license terms |
+| GitHub source and operative license | SOURCE_PUBLIC / LICENSE_PENDING | Public GitHub source exists; finalize operative license separately |
 | Pi Durable integration | CONNECTED_LOCAL | Real Codex dispatch, file tools, retry/reconnect/stop and durable identity evidence; trusted single-user only |
 | Convex shared records | NOT_CONNECTED | Configured service, project isolation and reconstructable execution views |
 | Hardened Outcomes evaluator | NOT_IMPLEMENTED | Duplicate-ID, critical-failure, evidence and resource regression cases |
@@ -17,7 +17,7 @@ Preparation is not execution. A passing local slice is not a complete V2 platfor
 
 ## Creative prerequisites
 
-Implemented locally: four aesthetic previews, original mark, saved launch-kit draft and human approval with stale-write protection. Next: user chooses direction; produce social masters and 30–60 second teaser; review actual assets; then connect execution. Add immutable asset hashes before shared production use.
+Implemented locally: four aesthetic previews, original mark, saved launch-kit draft and human approval with stale-write protection. Assembly was selected and social masters/a 45-second silent teaser are prepared for review. Pi execution is connected locally; final launch-package approval remains pending. Add immutable asset hashes before shared production use.
 
 ## 2026-10-15 — Hero and layout studies
 
