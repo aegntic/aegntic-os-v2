@@ -77,3 +77,5 @@ Persisted an immutable execution owner on runs through an additive SQLite migrat
 Independent review caught and corrected connection probing before ownership validation, a startup records-handle leak and non-string descriptor IDs. Added regressions and source-import boundaries. Final local checks: 32 Bun tests / 328 assertions, six publication tests, app/launch lint and builds, and supplemental explicit-file Oxlint passed. Oxlint resolved through the approved launcher's existing global fallback; no install or autofix occurred. CI module checks are added with pinned actions/Bun and the existing frozen launch dependency.
 
 Started the configured local workspace and Pi backend. Pi connectivity and all seven saved briefs were observed; no user project was dispatched or approved. Private checkpoints remain outside source. [Module contracts and upgrade procedure](MODULES.md); [qualification evidence](artifacts/product-foundry/modular-runtime/evidence.md).
+
+Remote verification: module compatibility and public-source-boundary workflows both passed for 84085cb. Exact commit/run links are recorded in artifacts/product-foundry/modular-runtime/ci.json.
