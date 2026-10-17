@@ -51,3 +51,7 @@ Checks: root 21 tests/252 assertions, launch 2 tests/21 assertions, both lint/bu
 ## 2026-10-16 — Tencent memory and SelfSearch assessment
 
 Identified the screenshot project and resolved its current default-branch commit; inspected README lineage acknowledgements and root license. Read the linked SelfSearch paper and separated memory retrieval from harness evolution. Added a synthetic-data evaluation plan with fixed scope, held-out checks, deletion/correction and permission boundaries. No third-party runtime installed, provider traffic rerouted, private transcript uploaded or production agent changed.
+
+## 2026-10-17 — README and third-party notice reconciliation
+
+Updated the application and research READMEs/notices to distinguish connected local execution, separately qualified candidates, Assembly review assets and the earlier narrated explainer. Added preserved Kokoro runtime and DejaVu font notices. Recorded historical verification counts with dates; no new runtime/model tests, publications or deployments performed.

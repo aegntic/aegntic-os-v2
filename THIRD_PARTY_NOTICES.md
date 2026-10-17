@@ -1,9 +1,47 @@
-# Third-party notices
+# Third-party notices and asset provenance
 
-The local execution integration uses disler/durable-pi at commit 37165c619573dbaf425463038bbffecfe576beec, copyright (c) 2026 IndyDevDan, MIT. Its original license is retained verbatim in integrations/pi-durable/UPSTREAM_LICENSE. Provider/recovery changes are supplied as a patch; upstream files retain their original grants and attribution.
+Updated **17 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Aegntic's proposed community/commercial policy does not replace those grants.
 
-The upstream backend's unmodified npm manifest and lockfile resolve @earendil-works/pi-durable, @earendil-works/pi-ai and @earendil-works/chord 1.0.3 from earendil-works/pi (MIT), together with their separately licensed dependencies. Preserve all applicable package notices when packaging that runtime. Node modules and private device/account credentials are not included in this source repository.
+## Execution integration
 
-The Aegntic mark was retrieved from Echo at the user's direction; generated hero images and their provenance are recorded in the visual-run artifacts. This notice does not assign the proposed community/commercial license to third-party source or revoke prior grants. Root project licensing remains as described in LICENSING-STATUS.md.
+| Component | Recorded source/version | Use and retained notice |
+| --- | --- | --- |
+| disler/durable-pi | `37165c619573dbaf425463038bbffecfe576beec` | External local execution backend; MIT, copyright (c) 2026 IndyDevDan. Original notice: [UPSTREAM_LICENSE](integrations/pi-durable/UPSTREAM_LICENSE). |
+| `@earendil-works/pi-durable`, `pi-ai`, `chord` | 1.0.3, resolved through upstream's existing npm lockfile | MIT family from earendil-works/pi; each package and its transitive dependencies retain their own notices. The source repository does not include the upstream node_modules closure. |
+| Node.js and Bun | Upstream Node runtime; Bun host requires 1.4.3+ | Separately installed runtimes, not bundled binaries. Keep their applicable notices if redistributing them. |
 
-The separate launch-site review uses Three.js 0.186.1 (MIT), pinned by its Bun lockfile; full upstream notice is preserved at launch-site/public/THREE-LICENSE.txt. Its geometry is procedural and hero/social artwork is captured from that render. No external model, texture, HDR environment or font asset was imported for this scene. Original Aegntic mark attribution above remains applicable.
+Provider and recovery changes are delivered as [provider-support.patch](integrations/pi-durable/provider-support.patch), not as a new license over upstream files. The patch adds provider support, read-only existing Codex sign-in access, request-ID recovery and a coding-only tool profile. See [EXECUTION.md](EXECUTION.md) for the qualified runtime and limits.
+
+The Bun host uses built-in HTTP/SQLite APIs and declares no external runtime package dependencies. The separate Pi backend still requires its upstream packages. Software licenses do not grant access to Codex accounts, hosted models or provider APIs; those services retain separate terms. Credentials and private device state are excluded from source.
+
+## Assembly launch-site dependency
+
+Three.js **0.186.1** is MIT, copyright © 2010–2026 three.js authors. The exact full notice is preserved at [THREE-LICENSE.txt](launch-site/public/THREE-LICENSE.txt); the version is pinned by `launch-site/package.json` and `launch-site/bun.lock`.
+
+The Assembly scene uses procedural geometry. Its social artwork and silent teaser are captures/compositions of that scene. No external model, texture, HDR environment or font asset was imported for it. Its CSS/system-font fallback does not bundle a webfont. Preserve the Three.js notice in distributions containing its code.
+
+## Brand, visual references and generated imagery
+
+The original Aegntic mark was retrieved from https://echo.aegntic.ai/aegntic-mark.webp at the user's direction. It is preserved without recolouring at `public/assets/aegntic-mark.webp`; retrieval/hash evidence is in [logo provenance](artifacts/product-foundry/creative-kickoff/logo-provenance.json). Use here does not grant unrelated parties general trademark or asset rights.
+
+The glass-gallery and smoked-instrument PNGs were generated with the built-in image-generation tool. Exact hashes and method are in [asset provenance](artifacts/product-foundry/hero-layouts/asset-provenance.json). They depict illustrative material studies, not actual Aegntic hardware. Generated media is not third-party MIT source merely because it appears beside MIT dependencies.
+
+User-supplied Aegntic PDFs, the tactile blueprint and the HTML style guide informed visual decisions; they were not imported as executable instructions or bundled reference documents in this application. Amber is Clawreform-specific. The user selected Assembly for the later launch-site review; final launch-package approval is separate.
+
+## Narration and video production
+
+The earlier narrated explainer is stored in the sibling `../aegntic-explainer-45s/` deliverable folder, outside this Git repository. It is separate from `launch-site/creative/AEGNTIC-assembly-45s-review.mp4`, which is a silent Assembly review cut.
+
+- **kokoro-onnx 0.6.1:** MIT, copyright (c) 2025 github.com/thewh1teagle. Exact notice preserved at [KOKORO-ONNX-LICENSE.txt](licenses/media/KOKORO-ONNX-LICENSE.txt). Used in an isolated uv-managed environment to synthesize the public `af_sarah` voice. No personal voice cloning.
+- **Kokoro-82M:** the upstream [model card](https://huggingface.co/hexgrad/Kokoro-82M) declares Apache-2.0. ONNX model and voice files came from the [runtime maintainer's model-files-v1.1 release](https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.1). The model hash and voice/timing provenance are recorded in the sibling explainer verification files. Weights and voice files remain outside this source repository and media delivery folder. This entry records model provenance; it is not a claim that every model-associated file has received a separate license audit.
+- **DejaVu Sans/Serif:** used to rasterize the earlier explainer's text. The installed font license is retained at [DEJAVU-LICENSE.txt](licenses/media/DEJAVU-LICENSE.txt). Font binaries are not bundled with the video.
+- **FFmpeg, Pillow, NumPy, SoundFile and ONNX Runtime:** local production/inference tools and dependencies. Their binaries/packages are not bundled with the delivered application or media. Any future redistribution of those tools needs their own resolved dependency/license notices; this is not a complete toolchain SBOM.
+- The earlier explainer's ambient audio was synthesized procedurally without external music recordings or samples. HeyGen required reauthentication; no HeyGen speech generation occurred for that cut.
+
+The narrated MP4, WebM, frame/audio fallback, subtitles and production notes are review artifacts. The older narration describes execution as planned because it predates the connected implementation. Runtime status is documented in EXECUTION.md. Neither media production nor aesthetic selection constitutes public-release approval.
+
+## Research candidates and distribution boundary
+
+Convex, Cloudroom, Activepieces, Crawlee, Scrapling, CloakBrowser and the other ecosystem candidates are tracked in the sibling [research notices](../multi-agent-os-integration/THIRD_PARTY_NOTICES.md). They are not all incorporated application dependencies. Cloudroom was built/tested separately; its app adapter remains unconnected. TencentDB Agent Memory and SelfSearch remain research inputs; see [MEMORY-AND-EVOLUTION.md](MEMORY-AND-EVOLUTION.md). GBrain is excluded.
+
+Before packaging the upstream execution backend or other services, resolve and retain notices from the exact installed production dependency closure. This document and the research inventory are not substitutes for that distribution-specific notice bundle. Root Aegntic licensing remains as described in [LICENSING-STATUS.md](LICENSING-STATUS.md).

@@ -1,29 +1,78 @@
 # Aegntic OS V2
 
-Local outcome workspace with persistent briefs, a six-control pre-launch evidence review and real Pi Durable agent execution through an existing Codex sign-in. Publication, payments and cloud deployment remain unconnected.
+An outcome workspace for briefs, creative approvals, agent execution and pre-launch evidence. Pi Durable executes approved local briefs through an existing Codex sign-in. The separate Assembly launch site provides a local waitlist and creative review package.
 
-## Run locally
+Documentation reconciled on **17 October 2026** against the checked-in implementation and retained evidence. This update did not run new agents, publish, deploy or send campaigns.
 
-Requires Bun 1.4.3 or later. There are no external runtime packages to install.
+## Start the workspace
+
+Requires Bun 1.4.3+. The Bun host uses built-in HTTP and SQLite support, with no external runtime packages to install for the host itself.
 
 ```sh
 bun start
 ```
 
-Open the local workspace at http://127.0.0.1:4317. The server binds to loopback only. Briefs/reviews are stored in the ignored `.data/` folder. Two clearly labelled local test records may be present from the first browser run. This is a single-user development application; do not expose it publicly as a multi-user service.
+Open http://127.0.0.1:4317/. This starts the workspace without execution credentials. To start the configured app and Pi backend together:
 
-## Available
+```sh
+bun run start:connected
+```
 
-- Five outcome choices: Venture Lab, Product Foundry, Experience Studio, Knowledge Engine and Agent Evolution.
-- Brief creation, persistent records, idempotent retry and an event history API.
-- Six review controls with evidence/applicability reasons and unresolved states.
-- Explicit distinction between a completed operator review and a verified or published outcome.
-- Desktop/mobile interface, local assets, keyboard labels/focus and reduced-motion support.
-- Private-state exclusions and a public-ready development log.
+Follow [EXECUTION.md](EXECUTION.md) for the pinned upstream checkout, original npm lockfile, provider patch, private configuration and recovery. Upstream Node/npm dependencies are separate from the Bun host. Never commit account tokens, device credentials, subscriber records or runtime databases.
 
-## Not connected
+The services bind to loopback and are intended for one trusted local user. The worker runs with the current user's filesystem privileges; its project folder is not an OS sandbox. Local briefs, reviews and run references live in ignored `.data/` storage. Browser qualification may leave labelled test briefs.
 
-Convex, Cloudroom, additional model providers, Google services, browser/render workers, social publishing and mobile distribution remain planned adapters. Plain `bun start` runs without execution credentials; connected execution requires the separate setup in EXECUTION.md. This application does not simulate unconnected services succeeding. Local brief storage is a temporary development boundary, not a replacement workflow engine or a deployed Convex service. GBrain is excluded from the plan.
+## What works locally
+
+- Five outcome families: Venture Lab, Product Foundry, Experience Studio, Knowledge Engine and Agent Evolution.
+- Persistent briefs, idempotent retries, event history and six pre-launch evidence controls.
+- Four hero/layout studies: cinematic, architectural, editorial and workbench.
+- Saved creative-package approval, stale-revision protection and approval invalidation after edits.
+- Pi Durable execution using the existing Codex sign-in, with start/reconnect, status refresh, stop intent and final results.
+- A separate Three.js Assembly launch-site review with local signup/removal and native/copy sharing.
+
+An operator review or model answer does not independently verify an outcome or authorize release. Creative approval is required before new dispatch; changing it does not automatically stop an existing run.
+
+## Ownership and remaining integrations
+
+Pi Durable owns model turns, tools, execution state and recovery. The host stores briefs, approvals and run references. Convex is the preferred shared application-data backend and remains unconnected.
+
+Cloudroom, additional model providers, Google services, automation/extraction workers, social publishing and mobile distribution remain unconnected. Cloudroom has been built and qualified separately, with a documented upstream test failure; it has not been integrated into the app. GBrain is excluded. Tencent memory and SelfSearch are research inputs, with no assumed upstream relationship or connected memory service.
+
+See [ROADMAP.md](ROADMAP.md), [Cloudroom qualification](CLOUDROOM-QUALIFICATION.md), [business services](BUSINESS-SERVICES.md) and [memory/evolution research](MEMORY-AND-EVOLUTION.md).
+
+## Creative review and Assembly site
+
+Offer 3–5 visual directions before a project build, then explicitly review the aesthetic, social graphics, a 30–60 second teaser and one CTA. Current records contain operator-supplied asset references and declared duration; the host does not inspect the referenced files or certify their contents. See [CREATIVE-KICKOFF.md](CREATIVE-KICKOFF.md).
+
+The user selected **bright architectural Assembly** on 16 October 2026. Amber remains specific to Clawreform. Aegntic uses neutral glass, chrome, paper and obsidian with restrained cool accents. Aesthetic selection does not approve final graphics, video or deployment.
+
+The [Assembly launch site](launch-site/README.md) runs separately on http://127.0.0.1:4320/:
+
+```sh
+cd launch-site
+bun install --frozen-lockfile --ignore-scripts
+bun run build
+bun start
+```
+
+It uses Three.js 0.186.1 and procedural geometry. Local signups stay in its private SQLite database; it sends no email and exposes no agent-dispatch routes. Four social master sizes and a **45-second silent Assembly review cut** are included. Public deployment, mail delivery and final launch-package approval remain pending.
+
+## Narrated explainer
+
+A separate, earlier seven-scene explainer is saved in the sibling [explainer deliverables](../aegntic-explainer-45s/SCRIPT-AND-STORYBOARD.md):
+
+- [Narrated 45-second MP4](../aegntic-explainer-45s/AEGNTIC-45-second-explainer-voiceover.mp4), with local Kokoro narration, music ducking and English subtitles.
+- [Browser WebM](../aegntic-explainer-45s/AEGNTIC-explainer-browser.webm) and a [visual fallback player](../aegntic-explainer-45s/watch.html) using synchronized image frames and audio.
+- [Voiceover provenance](../aegntic-explainer-45s/VOICEOVER-NOTES.md), narration WAV, captions and verification records.
+
+Sibling media and research links refer to workspace deliverables outside this Git repository; supply those folders alongside the checkout for the relative links to resolve. To view the fallback over loopback from the parent workspace:
+
+```sh
+python3 -m http.server 4318 --bind 127.0.0.1 --directory outputs/aegntic-explainer-45s
+```
+
+Then open http://127.0.0.1:4318/watch.html. The fallback uses an 8 fps visual preview; the MP4 retains 1920×1080 at 24 fps. The explainer predates connected execution and describes execution as a next step. Use [EXECUTION.md](EXECUTION.md) for current capability status. It is distinct from the later silent Assembly teaser and has not been approved for publication.
 
 ## Verification
 
@@ -33,30 +82,16 @@ bun test
 bun run build
 ```
 
-The project lint script checks server/browser syntax by bundling; supplemental Oxlint was run using the approved local launcher. No ESLint/TypeScript project configuration existed and none was removed. Current automated checks: 19 tests and 231 assertions, plus server/browser builds. Historical browser and real-model qualification evidence is retained under `artifacts/product-foundry/`. Cloudroom qualification has one documented upstream test failure; see CLOUDROOM-QUALIFICATION.md.
+The lint script bundles server/browser code; supplemental Oxlint follows the approved launcher and records resolution evidence. Existing checks are retained. No ESLint/TypeScript configuration existed and none was removed.
 
-A repeatable browser check is in `tests/browser-smoke.cjs`. Run it against the local app using a separately available Playwright installation; the check adds two labelled test briefs. `AEGNTIC_PLAYWRIGHT_MODULE` can point at an existing installation. Playwright is not auto-installed or a runtime dependency.
+Recorded on 16 October: app-only execution qualification had 19 tests / 231 assertions; the subsequent combined app/launch suite had 21 tests / 252 assertions, including the launch site's two tests / 21 assertions. These are retained results, not new runs from this documentation update. Browser, real-provider and filesystem evidence is under `artifacts/product-foundry/`; launch evidence is under `launch-site/evidence/`.
 
-## Build in public
+`tests/browser-smoke.cjs` and `tests/creative-browser.cjs` use a separately available Playwright installation. `AEGNTIC_PLAYWRIGHT_MODULE` can point to it. Browser checks add labelled fixtures; Playwright is not auto-installed.
 
-[BUILD-LOG.md](BUILD-LOG.md) records verified changes. [ROADMAP.md](ROADMAP.md) distinguishes working features from future integrations. The repository contains only this new app and its evidence; account-wide research, private sources, personal browser profiles, secrets and local databases stay outside the public source set. GitHub destination: https://github.com/aegntic/aegntic-os-v2. Operative licensing remains pending; publishing source does not finalize the proposed license.
+## Source, notices and licensing
 
-## Licensing
+[BUILD-LOG.md](BUILD-LOG.md) records changes; [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) separates incorporated code, upstream runtime dependencies, media tools and research candidates. Exact upstream notices and lockfiles remain applicable.
 
-The owner's proposed community/commercial policy allows personal and eligible startup use with monetary recognition above the confirmed revenue/user thresholds. The operative license and legal licensor have not been finalized. See [LICENSING-STATUS.md](LICENSING-STATUS.md). This first-run code is not represented as MIT, Apache or OSI-approved open source.
+GitHub destination: https://github.com/aegntic/aegntic-os-v2. Account-wide research and private sources remain outside the public source set. Do not publish internal inventory metadata or runtime data with the application.
 
-## Creative kickoff
-
-Four material/aesthetic examples now precede the brief. Every project requires a saved, explicitly approved social graphics and 30–60 second teaser package before execution. Changing the package revokes approval. See [creative kickoff](CREATIVE-KICKOFF.md). Final assets are not produced or verified by the local app; operator references are recorded.
-
-## Connected execution
-
-Pi Durable now runs approved briefs locally with the existing Codex sign-in (gpt-6.1-sol). Open agent execution beside a saved brief. Start/reconnect, refresh, stop and final results are available. See [execution setup and limits](EXECUTION.md).
-
-## Integration research
-
-[Cloudroom qualification](CLOUDROOM-QUALIFICATION.md) records the runtime checks and unresolved disk-pressure failure. [Business services](BUSINESS-SERVICES.md) maps CRM, Ghost publishing/newsletters and later customer operations. These are distinct from connected capabilities.
-
-## Assembly launch site
-
-A separate Three.js launch-site review is in [launch-site/](launch-site/README.md). It runs on loopback port 4320, with isolated local signup storage, native/copy sharing, social masters and a 45-second silent teaser review cut. It is not publicly deployed or connected to a mail provider.
+The operative Aegntic license and legal licensor remain pending. The proposed community/commercial policy uses US$1 million trailing annual gross revenue **or** 1,000 monthly active users as the commercial threshold. It does not relicense third-party code or revoke prior permissive grants. See [LICENSING-STATUS.md](LICENSING-STATUS.md). This repository is not represented as MIT, Apache or OSI-approved open source merely because its dependencies use those licenses.
