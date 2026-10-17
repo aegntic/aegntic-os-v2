@@ -1,6 +1,6 @@
 # Third-party notices and asset provenance
 
-Updated **17 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Aegntic's proposed community/commercial policy does not replace those grants.
+Updated **17 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Original Aegntic software and associated documentation are MIT licensed; that grant does not replace upstream grants or separately identified asset rights.
 
 ## Execution integration
 

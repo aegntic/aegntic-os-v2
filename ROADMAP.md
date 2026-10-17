@@ -4,7 +4,7 @@
 |---|---|---|
 | Local outcome briefs and six-control review | PASS | Persistence, retry, validation, HTTP and browser checks |
 | Public-safe build log and source separation | PREPARED | Only new app code/evidence in this repository; local data ignored |
-| GitHub source and operative license | SOURCE_PUBLIC / LICENSE_PENDING | Public GitHub source exists; finalize operative license separately |
+| GitHub source and operative license | SOURCE_PUBLIC / MIT | Original software and documentation are MIT licensed; preserve copyright and license notices |
 | Pi Durable integration | CONNECTED_LOCAL | Real Codex dispatch, file tools, retry/reconnect/stop and durable identity evidence; trusted single-user only |
 | Convex shared records | NOT_CONNECTED | Configured service, project isolation and reconstructable execution views |
 | Hardened Outcomes evaluator | NOT_IMPLEMENTED | Duplicate-ID, critical-failure, evidence and resource regression cases |

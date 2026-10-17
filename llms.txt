@@ -1,6 +1,6 @@
 # Aegntic OS V2
 
-> A local multi-agent outcome workspace for briefs, creative approvals, Pi Durable execution and pre-launch evidence. Public work in progress; operative project license pending. Updated 2026-10-17.
+> A local multi-agent outcome workspace for briefs, creative approvals, Pi Durable execution and pre-launch evidence. Public work in progress; MIT licensed with retained attribution. Updated 2026-10-17.
 
 ## Public project facts
 - [Overview](https://github.com/aegntic/aegntic-os-v2/blob/main/README.md): features, architecture, status, quickstart and FAQ.
@@ -11,7 +11,7 @@
 - [Creative kickoff](https://github.com/aegntic/aegntic-os-v2/blob/main/CREATIVE-KICKOFF.md): aesthetic and launch-package review.
 - [Assembly](https://github.com/aegntic/aegntic-os-v2/blob/main/launch-site/README.md): separate local launch-site review and waitlist.
 - [Third-party notices](https://github.com/aegntic/aegntic-os-v2/blob/main/THIRD_PARTY_NOTICES.md): attribution and dependency boundaries.
-- [Licensing](https://github.com/aegntic/aegntic-os-v2/blob/main/LICENSING-STATUS.md): pending operative license; preserve third-party grants.
+- [Licensing](https://github.com/aegntic/aegntic-os-v2/blob/main/LICENSING-STATUS.md): MIT license and attribution scope; preserve third-party grants.
 
 ## Limits
 Convex, Cloudroom app integration, additional providers, publishing and mobile distribution remain unconnected. Local model execution is not an OS sandbox. No public launch or current throughput benchmark is asserted. Private continuation content is not part of this index.

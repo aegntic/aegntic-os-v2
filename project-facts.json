@@ -30,7 +30,7 @@
     "exhaustive": false,
     "private_readme_section": false
   },
-  "licensing": "Operative project license pending; third-party grants preserved",
+  "licensing": "MIT for original software and associated documentation; retain copyright/license notices; third-party and trademark rights remain separate",
   "evidence": [
     "EXECUTION.md",
     "BUILD-LOG.md",

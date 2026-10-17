@@ -63,3 +63,7 @@ Rebuilt the public README with Assembly artwork, seven local SVG graphics, outco
 Added separate private-continuation instructions, local publication hooks and a pinned GitHub Actions check. The scanner checks indexed content and all reachable commit paths, including a deleted private alias sharing a public blob. Six publication regression tests passed; index/history checks and whitespace checks passed. Independent review approved the corrected scanner. Application behavior was unchanged; prior application results remain dated evidence.
 
 Private checkpoint recovery uses an encrypted local archive and a separately stored key outside this public checkout. Publication checks are defense in depth and do not guarantee detection of every possible sensitive value.
+
+## 17 October 2026 — MIT open-source release
+
+At the owner's request, replaced the proposed revenue/MAU-limited policy for this repository with the standard MIT License. Personal and commercial use are free at any scale; copyright and license notice retention are required. Visible public credit is encouraged without adding a custom license restriction. Updated README, roadmap, public facts, discovery index, badge and third-party notices. Private continuation and separately identified upstream/brand rights remain outside this grant. Earlier licensing entries are historical.

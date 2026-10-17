@@ -6,7 +6,7 @@
 
 [![Aegntic Assembly — watch an idea become a working thing](launch-site/public/social/assembly-landscape.png)](launch-site/README.md)
 
-<img src="docs/assets/badge-status.svg" alt="Local execution connected" width="185"> <img src="docs/assets/badge-stack.svg" alt="Bun and Pi Durable" width="185"> <img src="docs/assets/badge-privacy.svg" alt="Public source and separate private continuity" width="185"> <img src="docs/assets/badge-license.svg" alt="Operative project license pending" width="185">
+<img src="docs/assets/badge-status.svg" alt="Local execution connected" width="185"> <img src="docs/assets/badge-stack.svg" alt="Bun and Pi Durable" width="185"> <img src="docs/assets/badge-privacy.svg" alt="Public source and separate private continuity" width="185"> <img src="docs/assets/badge-license.svg" alt="MIT licensed — preserve attribution" width="185">
 
 **[Start locally](#start-locally) · [System map](#the-system-map) · [What works](#what-works-today) · [Follow the build](BUILD-LOG.md) · [Private continuity](#private-continuity)**
 
@@ -230,7 +230,7 @@ You can run the current services on loopback as a trusted local development setu
 
 ### Is this open source?
 
-The source is public, but the operative Aegntic license and legal licensor remain pending. The proposed policy is free personal/eligible-startup use, with paid commercial terms when annual gross revenue reaches US$1 million **or** usage reaches 1,000 MAU. It does not revoke prior third-party permissive grants. [Licensing status →](LICENSING-STATUS.md)
+Yes. Original Aegntic software and associated documentation in this repository are available under the [MIT License](LICENSE). Personal and commercial use are free at any revenue or user count. Keep the Aegntic copyright and full MIT notice in copies or substantial portions of the software, alongside applicable third-party notices. A visible “Built with Aegntic” credit and repository link are appreciated, but are not additional license conditions. [License scope and attribution →](LICENSING-STATUS.md)
 
 ### Where do data and credentials live?
 
@@ -244,4 +244,4 @@ No. The README supplies clear project facts, status, evidence, diagrams and dire
 
 **[Read the build log](BUILD-LOG.md) · [Inspect the roadmap](ROADMAP.md) · [Open an issue](https://github.com/aegntic/aegntic-os-v2/issues) · [Review execution](EXECUTION.md)**
 
-Preserve [third-party attribution](THIRD_PARTY_NOTICES.md), exact upstream notices and lockfiles. The proposed Aegntic community/commercial policy does not relicense upstream code. Private research, subscriber records, account credentials and continuation files are excluded from public publication.
+Preserve [third-party attribution](THIRD_PARTY_NOTICES.md), exact upstream notices and lockfiles. The Aegntic MIT license does not relicense upstream code or grant trademark rights. Private research, subscriber records, account credentials and continuation files are excluded from public publication.
