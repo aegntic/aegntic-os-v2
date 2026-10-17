@@ -37,7 +37,9 @@
     "ROADMAP.md",
     "launch-site/evidence/checks.json",
     "CLOUDROOM-QUALIFICATION.md",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "MODULES.md",
+    "artifacts/product-foundry/modular-runtime/evidence.md"
   ],
   "planned": [
     "Convex",
@@ -47,5 +49,21 @@
     "automation/extraction",
     "social publishing",
     "mobile distribution"
-  ]
+  ],
+  "modules": {
+    "contract_version": 1,
+    "records": "sqlite-local",
+    "execution": "pi-durable",
+    "run_owner": "pi-durable/v1",
+    "component_status_route": "/api/system",
+    "replacement_selection": "trusted startup factories; restart required",
+    "shared_data": "Convex planned projection; synchronous records port is not a network-store contract"
+  },
+  "modular_verification": {
+    "date": "2026-10-17",
+    "tests": 32,
+    "assertions": 328,
+    "publication_tests": 6,
+    "model_dispatched": false
+  }
 }

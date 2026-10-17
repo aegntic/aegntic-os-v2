@@ -76,7 +76,8 @@ test("HTTP execution checks creative approval before connection readiness", asyn
     const draft = { revision: 0, aesthetic: "obsidian", cta: "watch-build-live", destination: "https://example.com/build", graphics: "social.zip", video: "teaser.mp4", duration: 30 };
     expect((await request("creative", "PUT", draft)).status).toBe(200);
     expect((await request("creative/approve", "POST", { revision: 1, confirmed: true })).status).toBe(200);
-    const disconnected = await request("execute", "POST", {}); expect(disconnected.status).toBe(503); expect((await disconnected.json()).code).toBe("NOT_CONNECTED");
+    expect((await request("execute", "POST", {})).status).toBe(400);
+    const disconnected = await request("execute", "POST", { revision: 1 }); expect(disconnected.status).toBe(503); expect((await disconnected.json()).code).toBe("NOT_CONNECTED");
     expect((await request("creative", "PUT", { ...draft, revision: 1, duration: 60 })).status).toBe(200);
     expect((await request("execute", "POST", {})).status).toBe(409);
   } finally { await app.stop(); }

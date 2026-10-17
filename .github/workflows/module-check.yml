@@ -1,0 +1,32 @@
+name: Module compatibility
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  local-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Set up qualified Bun runtime
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.4.3
+      - name: Install locked launch-site dependency
+        working-directory: launch-site
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Check modules and application behavior
+        run: |
+          bun run lint
+          bun test
+          bun run build
+      - name: Check separate launch-site build
+        working-directory: launch-site
+        run: |
+          bun run lint
+          bun run build

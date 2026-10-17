@@ -1,0 +1,45 @@
+{
+  "observedDate": "2026-10-17",
+  "status": "PASS",
+  "contractVersion": 1,
+  "modules": [
+    {
+      "id": "sqlite-local",
+      "kind": "records",
+      "contractVersion": 1,
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "pi-durable",
+      "kind": "execution",
+      "contractVersion": 1,
+      "runOwner": "pi-durable/v1",
+      "status": "CONNECTED"
+    },
+    {
+      "id": "convex",
+      "kind": "shared-data",
+      "status": "NOT_CONNECTED"
+    },
+    {
+      "id": "cloudroom",
+      "kind": "coding-workers",
+      "status": "NOT_CONNECTED"
+    },
+    {
+      "id": "creative-publishing",
+      "kind": "creative-publishing",
+      "status": "NOT_CONNECTED"
+    },
+    {
+      "id": "rust-memory",
+      "kind": "memory",
+      "status": "NOT_CONNECTED"
+    }
+  ],
+  "preservedProjectCount": 7,
+  "activeRuns": 0,
+  "projectDispatched": false,
+  "credentialsIncluded": false,
+  "connectionOnly": true
+}

@@ -2,6 +2,7 @@
 
 | Slice | State | Exit evidence |
 |---|---|---|
+| Versioned module boundaries and safe replacement | PASS_LOCAL | Records/execution/Pi-client contracts, run ownership, migration/replacement/import tests; CI workflow added |
 | Local outcome briefs and six-control review | PASS | Persistence, retry, validation, HTTP and browser checks |
 | Public-safe build log and source separation | PREPARED | Only new app code/evidence in this repository; local data ignored |
 | GitHub source and operative license | SOURCE_PUBLIC / MIT | Original software and documentation are MIT licensed; preserve copyright and license notices |

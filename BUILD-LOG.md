@@ -67,3 +67,13 @@ Private checkpoint recovery uses an encrypted local archive and a separately sto
 ## 17 October 2026 — MIT open-source release
 
 At the owner's request, replaced the proposed revenue/MAU-limited policy for this repository with the standard MIT License. Personal and commercial use are free at any scale; copyright and license notice retention are required. Visible public credit is encouraged without adding a custom license restriction. Updated README, roadmap, public facts, discovery index, badge and third-party notices. Private continuation and separately identified upstream/brand rights remain outside this grant. Earlier licensing entries are historical.
+
+## 17 October 2026 — Versioned modular runtime
+
+Separated the outcome catalogue and shared errors, added records/execution/Pi-client contracts, and centralized trusted module selection and capability reporting in src/runtime.js. HTTP adds GET /api/system with allowlisted metadata. Existing routes and default Pi execution remain in use.
+
+Persisted an immutable execution owner on runs through an additive SQLite migration. Runtime and Pi-controller guards reject foreign owners before backend traffic or mutation; prior approval, device identity, retry and cancellation protections remain. Execution owner and API contract versions are separate from upstream package versions. The local records contract is synchronous; Convex is planned as a shared-data projection, not an assumed drop-in network store.
+
+Independent review caught and corrected connection probing before ownership validation, a startup records-handle leak and non-string descriptor IDs. Added regressions and source-import boundaries. Final local checks: 32 Bun tests / 328 assertions, six publication tests, app/launch lint and builds, and supplemental explicit-file Oxlint passed. Oxlint resolved through the approved launcher's existing global fallback; no install or autofix occurred. CI module checks are added with pinned actions/Bun and the existing frozen launch dependency.
+
+Started the configured local workspace and Pi backend. Pi connectivity and all seven saved briefs were observed; no user project was dispatched or approved. Private checkpoints remain outside source. [Module contracts and upgrade procedure](MODULES.md); [qualification evidence](artifacts/product-foundry/modular-runtime/evidence.md).

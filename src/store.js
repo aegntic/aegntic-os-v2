@@ -3,31 +3,12 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdirSync, chmodSync } from "node:fs";
 import { dirname } from "node:path";
 
-export const outcomes = [
-  { id: "venture-lab", name: "Venture Lab", purpose: "Find the audience. Test the offer.", artifact: "Offer and evidence-gap audit" },
-  { id: "product-foundry", name: "Product Foundry", purpose: "Build a working slice. Prove the behavior.", artifact: "Working slice and regression evidence" },
-  { id: "experience-studio", name: "Experience Studio", purpose: "Make it distinctive. Make it usable.", artifact: "Interface or media with inspection evidence" },
-  { id: "knowledge-engine", name: "Knowledge Engine", purpose: "Reach a sourced decision. Keep its lineage.", artifact: "Decision and primary-source references" },
-  { id: "agent-evolution", name: "Agent Evolution", purpose: "Test an improvement against a frozen baseline.", artifact: "Evaluation and reversible promotion decision" },
-];
-export const controls = [
-  { id: "C1", name: "Capacity", question: "Are capacity signals present at relevant account and data collection points?" },
-  { id: "C2", name: "Identifier disclosure", question: "Have avoidable third-party asset and tracking requests been addressed?" },
-  { id: "C3", name: "Input capture", question: "Are recording choices and sensitive-input masking verified?" },
-  { id: "C4", name: "Commercial messages", question: "Are message purpose, refusal path and sender identity established where applicable?" },
-  { id: "C5", name: "Recurring assent", question: "Are price and billing cadence clear beside payment controls?" },
-  { id: "C6", name: "User content", question: "Are upload surfaces and applicable operator notice paths established?" },
-];
-export const aesthetics = [
-  { id: "obsidian", name: "Obsidian Atelier", description: "Silver edges, pearl type and deep glass. Tactile depth from the supplied style guide, without Clawreform amber.", mood: "Tactile · intimate · composed" },
-  { id: "chrome", name: "Chrome Architecture", description: "Cool silver, glass panels and precise blue lines. Drawn from the AEGNTIC deck.", mood: "Technical · spatial · luminous" },
-  { id: "pearl", name: "Pearl Editorial", description: "Warm paper, oversized serif typography and generous quiet space.", mood: "Human · considered · editorial" },
-  { id: "signal", name: "Machined Instrument", description: "Graphite, brushed surfaces and precise utilitarian typography.", mood: "Tactile · precise · industrial" },
-];
-export const callsToAction = ["join-waitlist", "pre-order", "watch-build-live"];
-export class InputError extends Error {
-  constructor(message, status = 400) { super(message); this.status = status; }
-}
+import { outcomes, controls, aesthetics, callsToAction } from "./catalogue.js";
+import { InputError } from "./errors.js";
+import { assertRunOwner } from "./contracts.js";
+export { outcomes, controls, aesthetics } from "./catalogue.js";
+export { InputError } from "./errors.js";
+
 function text(value, field, max) {
   if (typeof value !== "string" || !value.trim() || value.length > max) throw new InputError(`${field} must contain 1–${max} characters.`);
   return value.trim();
@@ -47,6 +28,8 @@ export function openStore(filename) {
     CREATE TABLE IF NOT EXISTS events (sequence INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT NOT NULL REFERENCES projects(id), kind TEXT NOT NULL, created_at TEXT NOT NULL);
   `);
   if (!db.query("PRAGMA table_info(runs)").all().some((column) => column.name === "send_attempted")) db.exec("ALTER TABLE runs ADD COLUMN send_attempted INTEGER NOT NULL DEFAULT 0");
+  // Existing releases only wrote Pi runs. Add identity without rewriting those runs.
+  if (!db.query("PRAGMA table_info(runs)").all().some((column) => column.name === "execution_owner")) db.exec("ALTER TABLE runs ADD COLUMN execution_owner TEXT NOT NULL DEFAULT 'pi-durable/v1'");
   function project(id) {
     const record = db.query("SELECT id,title,outcome,objective,created_at FROM projects WHERE id=?").get(id);
     if (!record) throw new InputError("Project not found.", 404);
@@ -59,7 +42,7 @@ export function openStore(filename) {
   function run(id) {
     const record = db.query("SELECT * FROM runs WHERE id=?").get(id);
     if (!record) throw new InputError("Run not found.", 404);
-    return { id: record.id, projectId: record.project_id, creativeRevision: record.creative_revision, deviceUid: record.device_uid, model: JSON.parse(record.model), cwd: record.cwd, prompt: record.prompt, sessionId: record.session_id, submissionId: record.submission_id, sendAttempted: Boolean(record.send_attempted), state: record.state, result: record.result, error: record.error, createdAt: record.created_at, updatedAt: record.updated_at };
+    return { executionOwner: record.execution_owner, id: record.id, projectId: record.project_id, creativeRevision: record.creative_revision, deviceUid: record.device_uid, model: JSON.parse(record.model), cwd: record.cwd, prompt: record.prompt, sessionId: record.session_id, submissionId: record.submission_id, sendAttempted: Boolean(record.send_attempted), state: record.state, result: record.result, error: record.error, createdAt: record.created_at, updatedAt: record.updated_at };
   }
   function latestRun(projectId) { const record = db.query("SELECT id FROM runs WHERE project_id=? ORDER BY rowid DESC LIMIT 1").get(projectId); return record ? run(record.id) : null; }
   function checkApproval(id, revision) {
@@ -68,6 +51,7 @@ export function openStore(filename) {
     return p;
   }
   return {
+    module: Object.freeze({ id: "sqlite-local", kind: "records", contractVersion: 1 }),
     create(input, requestKey) {
       exactKeys(input, ["title", "outcome", "objective"]);
       const payload = { title: text(input.title, "Title", 120), outcome: input.outcome, objective: text(input.objective, "Objective", 6000) };
@@ -138,7 +122,8 @@ export function openStore(filename) {
     checkApproval,
     run,
     latestRun,
-    reserveRun(id, revision, deviceUid, model, workspace) {
+    reserveRun(id, revision, deviceUid, model, workspace, executionOwner = "pi-durable/v1") {
+      assertRunOwner(executionOwner);
       return db.transaction(() => {
         const p = checkApproval(id, revision);
         const existing = db.query("SELECT id FROM runs WHERE project_id=? AND creative_revision=?").get(id, revision);
@@ -147,7 +132,7 @@ export function openStore(filename) {
         if (active) throw new InputError("Finish or stop the earlier project run before dispatching a new revision.", 409);
         const runId = randomUUID(); const at = new Date().toISOString(); const cwd = workspace(id, revision);
         const prompt = "Implement this approved project brief in your working directory. Produce useful files and verification evidence. Do not publish or deploy.\n\n" + JSON.stringify({ title: p.title, outcome: p.outcome, objective: p.objective, creative: p.creative }, null, 2);
-        db.query("INSERT INTO runs(id,project_id,creative_revision,device_uid,model,cwd,prompt,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?, 'PREPARING',?,?)").run(runId, id, revision, deviceUid, JSON.stringify(model), cwd, prompt, at, at);
+        db.query("INSERT INTO runs(id,project_id,creative_revision,device_uid,model,cwd,prompt,state,created_at,updated_at,execution_owner) VALUES(?,?,?,?,?,?,?, 'PREPARING',?,?,?)").run(runId, id, revision, deviceUid, JSON.stringify(model), cwd, prompt, at, at, executionOwner);
         db.query("INSERT INTO events(project_id,kind,created_at) VALUES (?,?,?)").run(id, "execution.reserved", at);
         return run(runId);
       })();

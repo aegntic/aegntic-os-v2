@@ -6,6 +6,7 @@ import { randomUUID } from "node:crypto";
 import { openStore } from "../src/store.js";
 import { createPiClient } from "../src/pi-client.js";
 import { createExecution } from "../src/execution.js";
+import { startServer } from "../src/server.js";
 const cleanup = [];
 afterEach(async () => { for (const dispose of cleanup.splice(0).reverse()) await dispose(); });
 function directory() { const dir = mkdtempSync(join(tmpdir(), "aegntic-execution-")); cleanup.push(() => rmSync(dir, { recursive: true, force: true })); return dir; }
@@ -131,4 +132,20 @@ test("stop intent survives failed withdrawal after recovering a late admission",
   expect((await f.execution.abort(p.id, run.id)).state).toBe("STOP_UNCONFIRMED"); f.admissions.set(run.id, { submissionId: 10 });
   await expect(f.execution.refresh(p.id)).rejects.toThrow(); expect(store.run(run.id).state).toBe("STOP_UNCONFIRMED");
   expect((await f.execution.refresh(p.id)).state).toBe("ABORTED"); expect(f.calls.filter((c) => c.startsWith("DELETE "))).toHaveLength(2);
+});
+test("Pi controller refuses a differently owned saved run before network or mutation", async () => {
+  const store = openStore(":memory:"); cleanup.push(() => store.close()); const p = approved(store); const f = fixture({ store });
+  const run = store.reserveRun(p.id, 1, "another-device", { id: "fixture-model" }, () => "/fixture-only", "other-engine/v1");
+  for (const operation of [() => f.execution.dispatch(p.id, { revision: 1 }), () => f.execution.refresh(p.id), () => f.execution.abort(p.id, run.id)]) {
+    await expect(operation()).rejects.toMatchObject({ code: "EXECUTION_OWNER_MISMATCH", status: 409 });
+  }
+  expect(f.calls).toHaveLength(0); expect(store.run(run.id).state).toBe("PREPARING");
+});
+
+test("HTTP owner mismatch is rejected before even probing the configured Pi connection", async () => {
+  const f = fixture(); const app = startServer({ port: 0, database: ":memory:", pi: f.pi }); cleanup.push(() => app.stop());
+  const p = approved(app.store);
+  const run = app.store.reserveRun(p.id, 1, "another-device", { id: "fixture-model" }, () => "/fixture-only", "other-engine/v1");
+  const response = await fetch(new URL(`/api/projects/${p.id}/execute`, app.server.url), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision: 1 }) });
+  expect(response.status).toBe(409); expect((await response.json()).code).toBe("EXECUTION_OWNER_MISMATCH"); expect(f.calls).toHaveLength(0); expect(app.store.run(run.id).state).toBe("PREPARING");
 });

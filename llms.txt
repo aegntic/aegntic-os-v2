@@ -15,3 +15,5 @@
 
 ## Limits
 Convex, Cloudroom app integration, additional providers, publishing and mobile distribution remain unconnected. Local model execution is not an OS sandbox. No public launch or current throughput benchmark is asserted. Private continuation content is not part of this index.
+
+- [Modular architecture](https://github.com/aegntic/aegntic-os-v2/blob/main/MODULES.md): versioned contracts, safe run ownership, replacement qualification and component discovery.

@@ -1,9 +1,8 @@
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 
-export class ExecutionError extends Error {
-  constructor(message, code = "PI_UNAVAILABLE", status = 502) { super(message); this.code = code; this.status = status; }
-}
+import { ExecutionError } from "./errors.js";
+export { ExecutionError } from "./errors.js";
 export function createPiClient({ url, token, workspaceRoot, fetchImpl = fetch, timeoutMs = 12000 } = {}) {
   if (!url || !token || !workspaceRoot) return null;
   const base = new URL(url);
@@ -33,6 +32,7 @@ export function createPiClient({ url, token, workspaceRoot, fetchImpl = fetch, t
   }
   const sessionPath = (id) => `/v1/sessions/${encodeURIComponent(id)}`;
   return {
+    module: Object.freeze({ id: "pi-durable", kind: "pi-client", contractVersion: 1 }),
     async connection() {
       try { const d = await device(); const model = d.models.find((m) => m.id === d.defaultModel); return { status: model && model.provider !== "faux" ? "CONNECTED" : "NO_REAL_MODEL", deviceName: d.name, uid: d.uid, model: model ? { id: model.id, provider: model.provider, name: model.name } : null, detail: "Authenticated Pi device. Provider completion is verified separately from connectivity." }; }
       catch (e) { return { status: e.code || "PI_UNAVAILABLE", detail: e.message }; }

@@ -75,6 +75,12 @@ sequenceDiagram
 
 </details>
 
+### Upgradeable parts
+
+The host now validates versioned records, execution and Pi-client contracts. A central runtime selects implementations; saved runs retain their execution owner, and incompatible replacements are rejected before backend traffic. Import-boundary tests and a pinned CI workflow guard these seams. [Component map, contracts and replacement procedure →](MODULES.md)
+
+Inspect the running component status at `GET /api/system`. The modular qualification passed **32 tests / 328 assertions** on 17 October 2026. [Qualification evidence →](artifacts/product-foundry/modular-runtime/evidence.md) Convex and the other planned services remain explicitly unconnected.
+
 ## What works today
 
 | Capability | State | Evidence / next boundary |

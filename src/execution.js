@@ -1,5 +1,10 @@
-import { ExecutionError } from "./pi-client.js";
+import { ExecutionError } from "./errors.js";
+import { assertModule, assertExecutionOwner } from "./contracts.js";
 export function createExecution(store, pi) {
+  assertModule(store, "records");
+  if (pi) assertModule(pi, "pi-client");
+  const executionOwner = "pi-durable/v1";
+  const assertOwner = (run) => assertExecutionOwner(run, executionOwner);
   const active = new Map();
   const unavailable = () => { if (!pi) throw new ExecutionError("Pi Durable is not configured.", "NOT_CONNECTED", 503); };
   async function locked(id, task) {
@@ -37,14 +42,19 @@ export function createExecution(store, pi) {
     return store.updateRun(current.id, { state: "ABORTED", error: "Stopped by user.", result: "" });
   }
   return {
+    module: Object.freeze({ id: "pi-durable", kind: "execution", contractVersion: 1, runOwner: executionOwner }),
     connection: () => pi ? pi.connection() : Promise.resolve({ status: "NOT_CONNECTED", detail: "Configure a Pi device to run approved project briefs." }),
     async dispatch(projectId, input) {
-      store.checkApproval(projectId, input?.revision); unavailable();
+      store.checkApproval(projectId, input?.revision);
+      const previous = store.latestRun(projectId);
+      if (previous && (previous.creativeRevision === input.revision || !["DONE", "FAILED", "ABORTED"].includes(previous.state))) assertOwner(previous);
+      unavailable();
       const connection = await pi.connection();
       if (connection.status !== "CONNECTED") throw new ExecutionError(connection.detail, connection.status, 503);
-      const run = store.reserveRun(projectId, input.revision, connection.uid, connection.model, (id, rev) => pi.workspace(id, rev));
+      const run = store.reserveRun(projectId, input.revision, connection.uid, connection.model, (id, rev) => pi.workspace(id, rev), executionOwner);
       return locked(run.id, async () => {
         let current = store.run(run.id);
+        assertOwner(current);
         if (current.submissionId !== null || ["DONE", "FAILED", "ABORTED", "STOP_UNCONFIRMED"].includes(current.state)) return current;
         try {
           await pi.device(current.deviceUid);
@@ -64,9 +74,11 @@ export function createExecution(store, pi) {
     },
     async refresh(projectId) {
       const run = store.latestRun(projectId); if (!run) return null;
+      assertOwner(run);
       unavailable();
       return locked(run.id, async () => {
         let current = store.run(run.id);
+        assertOwner(current);
         if (["DONE", "FAILED", "ABORTED"].includes(current.state)) return current;
         const stopping = current.state === "STOP_UNCONFIRMED";
         current = await recover(current);
@@ -80,10 +92,12 @@ export function createExecution(store, pi) {
       });
     },
     async abort(projectId, expectedRunId) {
-      unavailable(); const run = store.latestRun(projectId); if (!run) throw new ExecutionError("No run to stop.", "RUN_NOT_FOUND", 404);
+      const run = store.latestRun(projectId); if (!run) throw new ExecutionError("No run to stop.", "RUN_NOT_FOUND", 404);
+      assertOwner(run); unavailable();
       if (run.id !== expectedRunId) throw new ExecutionError("The displayed run has changed. Reopen execution before stopping it.", "RUN_CHANGED", 409);
       return locked(run.id, async () => {
         let current = store.run(run.id);
+        assertOwner(current);
         if (store.latestRun(projectId).id !== expectedRunId) throw new ExecutionError("The displayed run has changed. Reopen execution before stopping it.", "RUN_CHANGED", 409);
         if (["DONE", "FAILED", "ABORTED"].includes(current.state)) return current;
         current = store.updateRun(current.id, { state: "STOP_UNCONFIRMED", error: "Stop requested; waiting for upstream confirmation." });

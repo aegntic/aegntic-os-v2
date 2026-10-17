@@ -1,31 +1,23 @@
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { openStore, outcomes, controls, aesthetics, InputError } from "./store.js";
+import { outcomes, controls, aesthetics } from "./catalogue.js";
+import { InputError, ExecutionError } from "./errors.js";
 
-import { createPiClient, ExecutionError } from "./pi-client.js";
-import { createExecution } from "./execution.js";
+import { createPiClient } from "./pi-client.js";
+import { createRuntime } from "./runtime.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export function startServer({ port = 4317, database = resolve(root, ".data/workspace.db"), pi = null } = {}) {
-  const store = openStore(database);
-  const execution = createExecution(store, pi);
+export function startServer({ port = 4317, database = resolve(root, ".data/workspace.db"), pi = null, recordsFactory, executionFactory } = {}) {
+  const runtime = createRuntime({ database, pi, recordsFactory, executionFactory });
+  const { store, execution } = runtime;
   const headers = {
     "Content-Security-Policy": "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",
     "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer", "Cache-Control": "no-store",
   };
   const json = (data, status = 200) => Response.json(data, { status, headers });
-  async function capabilities() {
-    const connection = await execution.connection();
-    return [
-    { name: "Briefs and pre-launch review", status: "AVAILABLE", detail: "Local persistent records; review evidence is operator supplied." },
-    { name: "Pi Durable", status: connection.status, detail: connection.status === "CONNECTED" ? `${connection.deviceName} · ${connection.model.name}. Approved briefs can run on this machine.` : connection.detail },
-    { name: "Convex", status: "NOT_CONNECTED", detail: "Shared application service not configured; this first-run workspace is local." },
-    { name: "Cloudroom / coding workers", status: "NOT_CONNECTED", detail: "No remote sessions or model requests." },
-    { name: "Google / creative / publishing", status: "NOT_CONNECTED", detail: "Adapters not implemented. Nothing will be published." },
-    { name: "Rust memory service", status: "NOT_CONNECTED", detail: "Candidate not installed. GBrain is excluded." },
-  ];
-  }
-  const server = Bun.serve({
+  let server;
+  try {
+    server = Bun.serve({
     hostname: "127.0.0.1", port, maxRequestBodySize: 24000,
     async fetch(req) {
       try {
@@ -37,7 +29,8 @@ export function startServer({ port = 4317, database = resolve(root, ".data/works
           const [name, type] = assets[url.pathname];
           return new Response(Bun.file(resolve(root, "public", name)), { headers: { ...headers, "Content-Type": type } });
         }
-        if (req.method === "GET" && url.pathname === "/api/workspace") return json({ outcomes, controls, aesthetics, capabilities: await capabilities(), projects: store.list(), version: "0.1.0", mode: "LOCAL_FIRST_RUN" });
+        if (req.method === "GET" && url.pathname === "/api/workspace") return json({ outcomes, controls, aesthetics, capabilities: await runtime.capabilities(), projects: store.list(), version: "0.1.0", mode: "LOCAL_FIRST_RUN" });
+        if (req.method === "GET" && url.pathname === "/api/system") return json(await runtime.describe());
         if (req.method === "GET" && url.pathname === "/api/execution/connection") return json(await execution.connection());
         if (!["GET", "POST", "PUT"].includes(req.method)) return json({ error: "Method not allowed." }, 405);
         if (["POST", "PUT"].includes(req.method) && !req.headers.get("content-type")?.startsWith("application/json")) return json({ error: "JSON content type required." }, 415);
@@ -63,7 +56,6 @@ export function startServer({ port = 4317, database = resolve(root, ".data/works
         if (req.method === "POST" && execute) {
           const project = store.project(execute[1]);
           if (!project.creativeReady) return json({ error: "Choose an aesthetic and approve the social graphics, teaser and call to action before building.", code: "CREATIVE_APPROVAL_REQUIRED" }, 409);
-          if (!pi) return json({ error: "Pi Durable is not configured.", code: "NOT_CONNECTED" }, 503);
           const input = await body();
           if (!input || typeof input !== "object" || Array.isArray(input) || Object.keys(input).some((key) => key !== "revision") || !Number.isSafeInteger(input.revision)) throw new InputError("The displayed creative revision is required.");
           const run = await execution.dispatch(execute[1], input);
@@ -83,6 +75,10 @@ export function startServer({ port = 4317, database = resolve(root, ".data/works
       }
     },
   });
+  } catch (error) {
+    store.close();
+    throw error;
+  }
   return { server, store, async stop() { await server.stop(true); store.close(); } };
 }
 if (import.meta.main) {
