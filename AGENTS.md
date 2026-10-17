@@ -2,6 +2,7 @@
 
 Read README.md, MODULES.md, EXECUTION.md and the latest BUILD-LOG.md before changing runtime behavior. Inherit the workspace's stack, privacy, creative-review and shared lint instructions.
 
+- Brief first: save what the project is and who it serves before showing visual directions. Show the saved brief as context for styling. Creative approval still precedes build execution.
 - Preserve contract version 1 semantics. New or replaced modules must pass compatibility tests and the explicit import boundaries in tests/boundaries.test.js.
 - Pi owns execution recovery. Convex is planned shared application data, not a second workflow scheduler. The v1 records port is synchronous; do not pretend a network-backed store is a drop-in replacement.
 - Never redirect saved runs to a different owner or device. Qualify migrations against fixtures, and preserve a private checkpoint before touching live state.

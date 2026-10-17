@@ -19,7 +19,7 @@ function renderAesthetics() {
     button.onclick = () => {
       if (creativeBusy) return;
       previewAesthetic = a.id; renderAesthetics(); $("aesthetics").children[index].focus({ preventScroll: true });
-      $("aesthetic-selection").textContent = `${a.name} selected for exploration. Save a brief, then approve its final launch kit.`;
+      $("aesthetic-selection").textContent = `${a.name} selected as a starting point for this brief. Save the direction before approving the final launch kit.`;
       if (creativeProject) { $("creative-aesthetic").value = a.id; markCreativeDirty(); }
     };
     return button;
@@ -53,9 +53,13 @@ function renderKickoff() {
   const c = project.creative; creativeDisplayedRevision = c.revision;
   $("kickoff-title").textContent = `Creative kickoff / ${project.title}`;
   $("creative-aesthetic").replaceChildren(...[{ id: "", name: "Choose an example above" }, ...state.aesthetics].map((a) => { const option = el("option", a.name); option.value = a.id; return option; }));
-  $("creative-aesthetic").value = c.aesthetic || previewAesthetic;
+  $("creative-brief").textContent = project.objective;
+  previewAesthetic = c.aesthetic || "";
+  renderAesthetics();
+  $("aesthetic-selection").textContent = c.aesthetic ? "Saved direction for this brief. Review the examples and adapt it to the outcome." : "Choose a starting point for this brief. No direction is selected.";
+  $("creative-aesthetic").value = c.aesthetic;
   for (const key of ["cta", "destination", "graphics", "video", "duration"]) $(`creative-${key}`).value = c[key];
-  creativeDirty = !c.aesthetic && Boolean(previewAesthetic);
+  creativeDirty = false;
   $("creative-confirm").checked = false;
   $("approve-creative").disabled = creativeDirty || creativeBusy || Boolean(c.approvedAt);
   $("kickoff-summary").textContent = c.approvedAt ? "Launch kit approved. Open agent execution when you are ready to start." : "Build held at creative kickoff. Choose a direction and review the final launch assets.";
@@ -67,6 +71,10 @@ function creativePayload() {
 }
 $("creative-form").addEventListener("input", markCreativeDirty);
 $("creative-form").addEventListener("change", markCreativeDirty);
+$("creative-aesthetic").addEventListener("change", () => {
+  previewAesthetic = $("creative-aesthetic").value; renderAesthetics();
+  $("aesthetic-selection").textContent = previewAesthetic ? "Direction changed for this brief. Save before approval." : "Choose a starting point for this brief. No direction is selected.";
+});
 async function saveCreative(approve) {
   if (creativeBusy) return;
   const project = state.projects.find((p) => p.id === creativeProject); if (!project) return;
@@ -211,7 +219,7 @@ $("brief").onsubmit = async (event) => {
     renderProjects();
     if (!creativeBusy) { ++creativeOpenRequest; creativeProject = result.project.id; renderKickoff(); $("kickoff").scrollIntoView({ block: "start" }); $("kickoff-title").focus({ preventScroll: true }); }
     pendingSubmission = undefined;
-    notice("Brief saved. Review its launch kit, then open agent execution. Nothing has been dispatched."); if (JSON.stringify({ title: $("title").value, outcome: selected, objective: $("objective").value }) === serialized) $("brief").reset();
+    notice("Brief saved. Now explore a visual direction for this project, then prepare its launch kit. Nothing has been dispatched."); if (JSON.stringify({ title: $("title").value, outcome: selected, objective: $("objective").value }) === serialized) $("brief").reset();
   } catch (error) { notice(error.message); } finally { briefBusy = false; button.disabled = false; }
 };
 $("close-review").onclick = () => { activeProject = undefined; renderReview(); };

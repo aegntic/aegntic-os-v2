@@ -79,3 +79,9 @@ Independent review caught and corrected connection probing before ownership vali
 Started the configured local workspace and Pi backend. Pi connectivity and all seven saved briefs were observed; no user project was dispatched or approved. Private checkpoints remain outside source. [Module contracts and upgrade procedure](MODULES.md); [qualification evidence](artifacts/product-foundry/modular-runtime/evidence.md).
 
 Remote verification: module compatibility and public-source-boundary workflows both passed for 84085cb. Exact commit/run links are recorded in artifacts/product-foundry/modular-runtime/ci.json.
+
+## 17 October 2026 — Brief before styling
+
+Corrected the working order to brief → visual direction → launch kit → approved build. The initial workspace shows outcome selection and the brief form. Four generic aesthetic examples now sit inside the project-specific creative panel, opened after saving a brief or choosing an existing brief. Its saved objective stays visible as context. New briefs no longer inherit the last explored direction from another project; reopening a project restores its own saved direction. Creative approval/revision and execution gates remain intact.
+
+Updated workflow copy, README diagram, creative instructions and the existing browser regression script. Independent review passed. Local project lint, supplemental explicit-file Oxlint (approved global fallback), build and all 32 Bun tests passed. Browser verification through the in-app browser observed the initial brief-first screen, saved-context handoff, no inherited selection for a new brief, and restored Chrome direction on reopening an earlier fixture. One labelled unapproved fixture brief was created; no agent dispatch or new launch approval occurred. [Browser evidence](artifacts/product-foundry/brief-first/evidence.md).

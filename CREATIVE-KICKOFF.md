@@ -1,6 +1,6 @@
-# Creative direction before execution
+# Brief first, then creative direction
 
-Every new project is offered four generic examples before implementation: Obsidian Atelier, Chrome Architecture, Pearl Editorial and Machined Instrument. Aesthetic choice and launch-kit approval are recorded per project. Brief collection and asset preparation can proceed while approval is pending; worker execution cannot.
+Save the outcome brief first: what is being made, who it serves and how success will be recognized. Only then offer four generic direction examples before implementation: Obsidian Atelier, Chrome Architecture, Pearl Editorial and Machined Instrument. Aesthetic choice and launch-kit approval are recorded per project. The saved brief remains visible above the examples. Examples are generic starting points, not generated custom designs. Asset preparation can proceed while approval is pending; worker execution cannot.
 
 ## Brand direction
 
@@ -16,7 +16,7 @@ Retrieved 2026-10-15 from https://echo.aegntic.ai/aegntic-mark.webp, referenced 
 
 ## Required approval package
 
-1. Choose a visual direction from 3–5 examples (four supplied in this version).
+1. Save the project brief, then choose a visual direction from 3–5 examples (four supplied in this version).
 2. Choose one primary CTA: join waitlist, pre-order or watch the build live, with its real HTTPS destination.
 3. Produce and review social graphic masters: square, portrait, vertical and landscape, plus channel crops, captions and alt text. Working master sizes: 1080×1080, 1080×1350, 1080×1920 and 1920×1080. These are production defaults, not guarantees of every platform's current upload limits.
 4. Produce and review a 30–60 second teaser, caption track and poster frame. Suggested 45-second cut: 0–5s useful outcome; 5–15s audience problem; 15–30s genuine working prototype; 30–38s next milestone; 38–45s CTA, destination and logo. Do not present planned integrations as working features. A pre-order requires actual price, delivery terms and payment review.
@@ -26,7 +26,7 @@ The current gate persists operator-supplied references and review confirmation. 
 
 ## Workflow integration
 
-Intent → aesthetic examples → chosen direction → launch-kit production → saved human approval → implementation → evidence → pre-launch review → authorized release → learn.
+Saved outcome brief → aesthetic examples → chosen direction → launch-kit production → saved human approval → implementation → evidence → pre-launch review → authorized release → learn.
 
 Pi Durable must check the approved creative revision immediately before execution when connected. Convex will hold the shared projection; the present local SQLite record is the first-run persistence layer. Later asset storage should pin content hashes and invalidate approval on content changes. Current edits invalidate by saved record revision; externally changed files behind the same reference are not detected.
 

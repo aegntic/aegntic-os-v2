@@ -4,11 +4,14 @@ const out=require('node:path').resolve(__dirname,'../artifacts/product-foundry/c
 const fixtureTitle=`Creative kickoff browser fixture ${Date.now()}`;
 (async()=>{
  const browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:1440,height:1100}});const errors=[];page.on('pageerror',e=>errors.push(e.message));const checks=[];
- await page.goto('http://127.0.0.1:4317/');await page.locator('.aesthetic').last().waitFor();
- if(await page.locator('.aesthetic').count()!==4)throw Error('four choices missing');checks.push('Four distinct aesthetic previews displayed before brief');
+ await page.goto('http://127.0.0.1:4317/');await page.locator('.outcome').last().waitFor();
+ if(await page.locator('#creative-start').isVisible())throw Error('styling shown before a saved brief');checks.push('Brief is the first step; styling is hidden until a saved brief is opened');
+ await page.locator('#title').fill(fixtureTitle);await page.locator('#objective').fill('Exercise the creative approval gate. Test references only; no actual assets approved for publication.');await page.getByRole('button',{name:'Save outcome brief'}).click();
+ await page.locator('#kickoff').waitFor({state:'visible'});if(await page.locator('#creative-brief').textContent()!=='Exercise the creative approval gate. Test references only; no actual assets approved for publication.')throw Error('brief context missing');
+ if(await page.locator('#creative-aesthetic').inputValue()!=='')throw Error('direction inherited before choice');
+ if(await page.locator('.aesthetic').count()!==4)throw Error('four choices missing');
+ await page.locator('.aesthetic.chrome').click();if(await page.locator('#creative-aesthetic').inputValue()!=='chrome')throw Error('choice lost');checks.push('Saved brief appears before four direction examples; choosing a direction applies to that brief');
  await page.locator('#creative-start').scrollIntoViewIfNeeded();await page.screenshot({path:out+'/aesthetic-options.png'});
- await page.locator('.aesthetic.chrome').click();await page.locator('#title').fill(fixtureTitle);await page.locator('#objective').fill('Exercise the creative approval gate. Test references only; no actual assets approved for publication.');await page.getByRole('button',{name:'Save outcome brief'}).click();
- await page.locator('#kickoff').waitFor({state:'visible'});if(await page.locator('#creative-aesthetic').inputValue()!=='chrome')throw Error('choice lost');checks.push('Selected direction follows new brief into kickoff');
  await page.locator('#creative-destination').fill('https://example.com/waitlist');await page.locator('#creative-graphics').fill('TEST FIXTURE: social pack');await page.locator('#creative-video').fill('TEST FIXTURE: 45 second teaser');await page.getByRole('button',{name:'Save creative draft'}).click();await page.waitForFunction(()=>document.getElementById('notice').textContent.includes('Creative draft saved'));
  await page.locator('#creative-confirm').check();await page.getByRole('button',{name:'Approve launch kit',exact:true}).click();await page.waitForFunction(()=>document.getElementById('kickoff-summary').textContent.startsWith('Launch kit approved'));checks.push('Explicit saved-package approval works');
  const projects=await page.evaluate(()=>fetch('/api/workspace').then(r=>r.json()));const project=projects.projects.find(p=>p.title===fixtureTitle);

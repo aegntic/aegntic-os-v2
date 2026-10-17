@@ -32,7 +32,7 @@ The workspace offers these outcome families. It does not claim that every specia
 
 ```mermaid
 flowchart LR
-    Intent["Describe the outcome"] --> Direction["Explore 3–5 visual directions"]
+    Intent["Save the outcome brief"] --> Direction["Explore 3–5 visual directions"]
     Direction --> Kit["Prepare social graphics + 30–60s teaser + CTA"]
     Kit --> Approval{"Review and approve saved package"}
     Approval -->|Approved| Execute["Pi Durable agent execution"]
