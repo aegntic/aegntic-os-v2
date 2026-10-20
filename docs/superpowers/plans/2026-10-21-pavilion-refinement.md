@@ -17,4 +17,8 @@ Preserve MIT/notices and the original source. No new external services, public d
 - [x] 2. Product/UI: semantic page, premium responsive styles, factual examples, independent accessible UI/signup module. Files: launch-site/public/{index.html,style.css}, src/{client,site-ui}.js. Keep renderer contract #scene; API endpoints unchanged. Review before completion.
 - [x] 3. 3D: extract existing geometry, authored three-frame camera, curated materials/light, optional quality/static modes; stop idle rendering and freeze offscreen. File: launch-site/src/pavilion.js. Review before completion.
 - [x] 4. Validate: existing checks, browser desktop/mobile/keyboard/static, Worker migration tests, independent broad review; fix material findings. Record evidence without imaginary scores.
-- [ ] 5. Docs/source: README, build log, third-party notices, runbook and matching social image from verified scene where feasible. Commit and push feature branch; no live publish.
+- [x] 5. Docs/source: README, build log, third-party notices, runbook and matching social image from verified scene where feasible. Commit and push feature branch; no live publish.
+
+## Delivery evidence
+
+Implementation pushed as `7bbc754` on `feat/pavilion-product-experience`. Both GitHub checks passed for that implementation commit: Module compatibility (39482036941) and Public source boundary (39482037115). Desktop/mobile captures and local validation are recorded in `launch-site/evidence/refinement-2026-10-21.md`. No production deployment or live D1 migration was performed.
