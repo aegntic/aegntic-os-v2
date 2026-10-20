@@ -19,7 +19,7 @@ export function createPiClient({ url, token, workspaceRoot, fetchImpl = fetch, t
   }
   async function device(expectedUid) {
     const d = await request("/v1/device");
-    if (d.aegnticRecovery !== 1 || d.apiVersion !== 1 || d.durableVersion !== "1.0.3" || typeof d.uid !== "string" || !Array.isArray(d.models)) throw new ExecutionError("Pi API or durable version does not match the qualified v1 / 1.0.3 contract.", "PI_INCOMPATIBLE");
+    if (d.aegnticRecovery !== 1 || d.apiVersion !== 1 || !["1.0.3", "1.1.0"].includes(d.durableVersion) || typeof d.uid !== "string" || !Array.isArray(d.models)) throw new ExecutionError("Pi API or durable version does not match the qualified v1 / durable 1.0.3 or 1.1.0 contract.", "PI_INCOMPATIBLE");
     if (expectedUid && d.uid !== expectedUid) throw new ExecutionError("The configured Pi device has changed. Reconcile this run before reconnecting.", "PI_DEVICE_CHANGED", 409);
     return d;
   }

@@ -14,7 +14,9 @@
 
 **Aegntic is a local multi-agent outcome workspace that turns a brief into reviewed work and inspectable evidence.** It combines five outcome families, creative approvals, Pi Durable execution through an existing Codex sign-in, persistent records and a six-control pre-launch review. A separate Three.js Assembly site explores the public launch experience.
 
-**Current state — 17 October 2026:** trusted local execution is connected. The launch site is a local review. Convex, external publishing and mobile distribution remain planned. Source is public; operational state and private continuation stay outside the published checkout.
+**Core updated — 21 October 2026:** Pi Durable / pi-ai / chord 1.1.0; [upgrade and recovery evidence](CORE-UPGRADE.md), [Disler tool map](DISLER-TOOLS.md).
+
+**Application baseline — 17 October 2026:** trusted local execution is connected. The launch site is a local review. Convex, external publishing and mobile distribution remain planned. Source is public; operational state and private continuation stay outside the published checkout.
 
 ## From an idea to something real
 

@@ -39,3 +39,7 @@ See [CLOUDROOM-QUALIFICATION.md](CLOUDROOM-QUALIFICATION.md). Build/lint and foc
 ## 2026-10-16 — Memory and evolution research inputs
 
 Added [MEMORY-AND-EVOLUTION.md](MEMORY-AND-EVOLUTION.md): pinned TencentDB Agent Memory as an alternative memory-service candidate, and SelfSearch as an independent research method for controlled harness evolution. Neither is installed or connected; no performance improvement or relationship between the projects is assumed. Existing Pi ownership, deferred shared Convex projection and GBrain exclusion remain intact.
+
+## 2026-10-21 — Pi core and proactive research
+
+Upgraded the local Pi runtime family to 1.1.0 on pinned Disler source, with reproducible npm overlay, migration/recovery qualification and rollback instructions in [CORE-UPGRADE.md](CORE-UPGRADE.md). [Disler news-agent and Jev](DISLER-TOOLS.md) are catalogued for bounded audience research; inference integration and recurring sweeps remain NOT_CONNECTED.

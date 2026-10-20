@@ -1,0 +1,11 @@
+{
+  "source": "https://github.com/disler/durable-pi",
+  "revision": "37165c619573dbaf425463038bbffecfe576beec",
+  "durableVersion": "1.1.0",
+  "packages": [
+    "@earendil-works/chord",
+    "@earendil-works/pi-ai",
+    "@earendil-works/pi-durable"
+  ],
+  "lockSha256": "18ba18f89365dfdb96b6cfb8f97495ffdbd461fabe759e69f517748bc6c4ef1a"
+}

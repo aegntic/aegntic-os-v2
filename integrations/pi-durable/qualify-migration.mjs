@@ -1,0 +1,46 @@
+// Run with Node and the candidate checkout's tsx loader; uses isolated synthetic state.
+import assert from 'node:assert/strict';
+import { mkdtemp, mkdir, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { resolve, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
+const [oldPath, nextPath] = process.argv.slice(2);
+if (!oldPath || !nextPath) throw Error('Provide old and candidate checkout paths.');
+const load = async (path) => import(pathToFileURL(resolve(path, 'apps/dpi-backend/src/store.ts')).href);
+const { Store: Previous } = await load(oldPath);
+const { Store: Candidate } = await load(nextPath);
+const root = await mkdtemp(join(tmpdir(), 'aegntic-core-migration-'));
+const cwd = join(root, 'workspace'); await mkdir(cwd);
+const options = { dataDir: join(root, 'state'), startDirs: [cwd], name: 'Migration fixture', provider: 'faux' };
+const model = { provider: 'faux', modelId: 'echo' };
+const until = async (fn) => { for (let i = 0; i < 200; i++) { if (await fn()) return; await new Promise(r => setTimeout(r, 100)); } throw Error('Migration recovery timed out'); };
+let store;
+try {
+  store = await Previous.open(options);
+  assert.equal(store.deviceInfo().durableVersion, '1.0.3');
+  const uid = store.deviceInfo().uid;
+  const session = await store.create({ name: 'Migration fixture', cwd, model });
+  let main = await store.resolveAgent(session.id, 'main');
+  await store.configure(main.row, main.c, { toolProfile: 'aegntic-drafting', readOnly: true });
+  const submission = await store.send(main.c, { content: 'Synthetic migration check', requestId: 'migration-check' });
+  const answer = await store.settled(main.h, submission.id, 20000); assert.equal(answer.status, 'done');
+  const job = await store.startJob(main.row, main.h, main.c, { job: 'change-watch', input: { checks: 5, interval_seconds: 2 } });
+  const jobState = async () => (await store.agentDoc(main.h, main.c, 'demo.job-runs')).items[job.taskId];
+  await until(async () => ((await jobState())?.phases[1]?.progress?.done ?? 0) >= 1);
+  assert.notEqual((await jobState()).status, 'completed');
+  await store.close(); store = await Candidate.open(options);
+  assert.equal(store.deviceInfo().durableVersion, '1.1.0'); assert.equal(store.deviceInfo().uid, uid);
+  main = await store.resolveAgent(session.id, 'main');
+  assert.equal(store.list().length, 1);
+  assert.deepEqual(await store.lookupSubmission(main.h, main.c, 'migration-check'), { submissionId: submission.id });
+  assert.deepEqual(await store.settled(main.h, submission.id, 0), answer);
+  assert.ok((await store.agentDetail(main.row, main.c)).tools.every(tool => !tool.offered));
+  await until(async () => (await jobState())?.status === 'completed');
+  const finished = await jobState();
+  assert.equal(finished.phases[1].steps.filter(s => s.kind === 'checkpoint' && s.status === 'done').length, 5);
+  assert.equal((await store.entries(main.c, undefined, 200)).items.filter(e => e.kind === 'demo.job').length, 1);
+  await store.close(); store = await Candidate.open(options); main = await store.resolveAgent(session.id, 'main');
+  assert.deepEqual(await store.settled(main.h, submission.id, 0), answer);
+  assert.equal((await jobState()).status, 'completed');
+  console.log(JSON.stringify({ status: 'PASS', from: '1.0.3', to: '1.1.0', checks: ['device identity retained', 'saved submission recovered without resend', 'zero-tool profile retained', 'in-flight durable job resumed once', 'result survives another reopen'], provider: 'faux', liveModel: false }));
+} finally { await store?.close(); await rm(root, { recursive: true, force: true }); }

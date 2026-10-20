@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-21",
+  "tools": [
+    {
+      "id": "durable-pi",
+      "repository": "https://github.com/disler/durable-pi",
+      "revision": "37165c619573dbaf425463038bbffecfe576beec",
+      "status": "CONNECTED_LOCAL",
+      "coreVersion": "1.1.0",
+      "overlay": "../pi-durable/core-1.1.0.patch"
+    },
+    {
+      "id": "pi-durable-news-agent",
+      "repository": "https://github.com/disler/pi-durable-news-agent",
+      "revision": "273b79bb8d3d8907cae9fbd6abd3da163ee2a343",
+      "status": "RESEARCHED_NOT_CONNECTED",
+      "license": "MIT",
+      "video": "https://www.youtube.com/watch?v=OLqP8jxJ0Wc",
+      "role": "Source gathering, relevance, deduplication, Hype/Facts/Signal ranking and research suggestions",
+      "upstreamPackages": [
+        "@earendil-works/pi-durable@1.1.0",
+        "@earendil-works/pi-ai@1.1.0",
+        "@earendil-works/chord@1.1.0"
+      ],
+      "jev": "Repository-local wrapper; hosted inference requires separate provider access"
+    }
+  ]
+}

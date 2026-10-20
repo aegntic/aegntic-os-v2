@@ -1,7 +1,7 @@
-diff --git i/apps/dpi-backend/src/config.ts w/apps/dpi-backend/src/config.ts
+diff --git a/apps/dpi-backend/src/config.ts b/apps/dpi-backend/src/config.ts
 index f5036a6..e098452 100644
---- i/apps/dpi-backend/src/config.ts
-+++ w/apps/dpi-backend/src/config.ts
+--- a/apps/dpi-backend/src/config.ts
++++ b/apps/dpi-backend/src/config.ts
 @@ -13,7 +13,7 @@ export interface BackendConfig {
    envFile: string;
    dataDir: string;
@@ -20,10 +20,10 @@ index f5036a6..e098452 100644
      token: env.DPI_TOKEN ?? "",
    };
    if (!Number.isInteger(config.port) || config.port < 1 || config.port > 65535)
-diff --git i/apps/dpi-backend/src/routes.ts w/apps/dpi-backend/src/routes.ts
+diff --git a/apps/dpi-backend/src/routes.ts b/apps/dpi-backend/src/routes.ts
 index 338eee6..beec143 100644
---- i/apps/dpi-backend/src/routes.ts
-+++ w/apps/dpi-backend/src/routes.ts
+--- a/apps/dpi-backend/src/routes.ts
++++ b/apps/dpi-backend/src/routes.ts
 @@ -153,6 +153,7 @@ export function v1(store: Store) {
    );
    r.post(`${a}/abort`, route(async (req, res) => res.json(await store.abort(L(res).c, req.body?.background === true))));
@@ -32,10 +32,10 @@ index 338eee6..beec143 100644
    r.get(`${a}/config`, route(async (_req, res) => res.json((await store.agentDetail(L(res).row, L(res).c)).config)));
    r.patch(`${a}/config`, route(async (req, res) => res.json(await store.configure(L(res).row, L(res).c, req.body ?? {}))));
    r.get(`${a}/extensions`, route(async (_req, res) => res.json(await store.extensionsOf(L(res).row, L(res).c))));
-diff --git i/apps/dpi-backend/src/store.ts w/apps/dpi-backend/src/store.ts
-index 313accd..5becc18 100644
---- i/apps/dpi-backend/src/store.ts
-+++ w/apps/dpi-backend/src/store.ts
+diff --git a/apps/dpi-backend/src/store.ts b/apps/dpi-backend/src/store.ts
+index 313accd..9171ec5 100644
+--- a/apps/dpi-backend/src/store.ts
++++ b/apps/dpi-backend/src/store.ts
 @@ -38,6 +38,8 @@ import { homedir, hostname, platform } from "node:os";
  import { randomUUID } from "node:crypto";
  import { BACKGROUND_CONTEXT as ctx, withAbortSignal } from "@earendil-works/chord/context";
@@ -86,15 +86,16 @@ index 313accd..5becc18 100644
      else {
        const provider = openrouterProvider();
        const catalog = provider.getModels();
-@@ -251,6 +278,7 @@ export class Store {
+@@ -251,6 +278,8 @@ export class Store {
        hostname: hostname(),
        platform: `${platform()}-${process.arch} node ${process.version}`,
        apiVersion: 1,
 +      aegnticRecovery: 1,
++      aegnticDrafting: 1,
        durableVersion: DURABLE_VERSION,
        startedAt: this.startedAt,
        startDirs: this.startDirs,
-@@ -264,6 +292,12 @@ export class Store {
+@@ -264,6 +293,12 @@ export class Store {
    }
  
    private defaultModel() {
@@ -107,7 +108,7 @@ index 313accd..5becc18 100644
      return this.options.provider === "faux" ? fauxModels[0].id : defaultModelId;
    }
  
-@@ -279,6 +313,11 @@ export class Store {
+@@ -279,6 +314,11 @@ export class Store {
          reasoning: false,
          cost: { input: 0, output: 0 },
        }));
@@ -119,7 +120,7 @@ index 313accd..5becc18 100644
      const available = await this.models.getAvailable("openrouter", { signal: AbortSignal.timeout(10000) });
      return curatedModels.flatMap((c) => {
        const m = available.find((m) => m.id === c.id);
-@@ -304,6 +343,7 @@ export class Store {
+@@ -304,6 +344,7 @@ export class Store {
        const id = fauxModels.some((m) => m.id === model?.modelId) ? model!.modelId : fauxModels[0].id;
        return { provider: "faux", modelId: id };
      }
@@ -127,7 +128,7 @@ index 313accd..5becc18 100644
      const exact = model?.provider === "openrouter" ? model.modelId : `${model?.provider}/${model?.modelId}`;
      return {
        provider: "openrouter",
-@@ -318,7 +358,9 @@ export class Store {
+@@ -318,7 +359,9 @@ export class Store {
      const known =
        this.options.provider === "faux"
          ? m.provider === "faux" && fauxModels.some((f) => f.id === m.modelId)
@@ -138,21 +139,23 @@ index 313accd..5becc18 100644
            curatedModels.some((c) => c.id === m.modelId) &&
            !!this.models.getModel(m.provider, m.modelId);
      if (!known) throw invalid(`Unknown model ${m.provider}/${m.modelId}. Choose one from GET /v1/device models`);
-@@ -777,8 +819,12 @@ export class Store {
+@@ -777,8 +820,14 @@ export class Store {
      }
      if (body.readOnly !== undefined && typeof body.readOnly !== "boolean") throw invalid("readOnly must be a boolean");
      // Read only filters the agent's tools: the model is never offered the ones that create, update or delete.
-+    if (body.toolProfile !== undefined && body.toolProfile !== "aegntic-coding") throw invalid("Unknown tool profile");
++    if (body.toolProfile !== undefined && body.toolProfile !== "aegntic-coding" && body.toolProfile !== "aegntic-drafting") throw invalid("Unknown tool profile");
 +    const codingTools = new Set(["read", "write", "edit", "bash"]);
      const tools =
 -      body.readOnly === true
-+      body.toolProfile === "aegntic-coding"
++      body.toolProfile === "aegntic-drafting"
++        ? { tools: { remove: (await this.toolsOf(c)).all } }
++        : body.toolProfile === "aegntic-coding"
 +        ? { tools: { remove: (await this.toolsOf(c)).all.filter((t) => !codingTools.has(t.name)) } }
 +        : body.readOnly === true
          ? { tools: { remove: (await this.toolsOf(c)).all.filter((t) => WRITE_TOOLS.has(t.name)) } }
          : body.readOnly === false
            ? { tools: null }
-@@ -837,6 +883,12 @@ export class Store {
+@@ -837,6 +886,12 @@ export class Store {
      return { submissionId, status: record.status === "queued" ? "queued" : "pending" };
    }
  
@@ -165,11 +168,17 @@ index 313accd..5becc18 100644
    async abort(c: Conversation, background: boolean) {
      await c.abort(ctx, { background });
      return { ok: true as const };
-diff --git i/apps/dpi-backend/tests/store.test.ts w/apps/dpi-backend/tests/store.test.ts
-index 1ceecf3..ae3c2c8 100644
---- i/apps/dpi-backend/tests/store.test.ts
-+++ w/apps/dpi-backend/tests/store.test.ts
-@@ -257,3 +257,29 @@ test("read only: the agent is offered only tools that read; turning it off resto
+diff --git a/apps/dpi-backend/tests/store.test.ts b/apps/dpi-backend/tests/store.test.ts
+index 1ceecf3..db9db44 100644
+--- a/apps/dpi-backend/tests/store.test.ts
++++ b/apps/dpi-backend/tests/store.test.ts
+@@ -1,4 +1,5 @@
+ import { test } from "node:test";
++import { BACKGROUND_CONTEXT as ctx } from "@earendil-works/chord/context";
+ import assert from "node:assert/strict";
+ import { join } from "node:path";
+ import { existsSync } from "node:fs";
+@@ -257,3 +258,53 @@ test("read only: the agent is offered only tools that read; turning it off resto
      await t.cleanup();
    }
  });
@@ -199,16 +208,42 @@ index 1ceecf3..ae3c2c8 100644
 +    if (previous === undefined) delete process.env.DPI_CODEX_AUTH_FILE; else process.env.DPI_CODEX_AUTH_FILE = previous;
 +  }
 +});
-diff --git i/apps/dpi-sdk/src/api.ts w/apps/dpi-sdk/src/api.ts
-index 686c58c..06d3d89 100644
---- i/apps/dpi-sdk/src/api.ts
-+++ w/apps/dpi-sdk/src/api.ts
-@@ -61,6 +61,8 @@ export interface DeviceInfo {
++
++test("Aegntic drafting removes every actual agent tool, survives restart and preserves coding configuration", async () => {
++  const t = await tempStore();
++  let store = await t.open();
++  try {
++    assert.equal(store.deviceInfo().aegnticDrafting, 1);
++    const session = await store.create({ name: "Tool-free drafting fixture", cwd: t.work, model: faux });
++    let main = await store.resolveAgent(session.id, "main");
++    assert.ok((await main.c.agent(ctx)).tools.length > 0);
++    await assert.rejects(() => store.configure(main.row, main.c, { toolProfile: "unknown-profile" }), /Unknown tool profile/);
++    await store.configure(main.row, main.c, { readOnly: false, toolProfile: "aegntic-drafting" });
++    assert.deepEqual((await main.c.agent(ctx)).tools, [], "runtime offers zero tools regardless of readOnly");
++    assert.ok((await store.agentDetail(main.row, main.c)).tools.every((tool) => !tool.offered));
++    await store.close(); store = await t.open();
++    main = await store.resolveAgent(session.id, "main");
++    assert.deepEqual((await main.c.agent(ctx)).tools, [], "durable config keeps zero tools after restart");
++    await store.configure(main.row, main.c, { readOnly: false, toolProfile: "aegntic-coding" });
++    assert.deepEqual((await main.c.agent(ctx)).tools.map((tool) => tool.name).sort(), ["bash", "edit", "read", "write"]);
++    await store.configure(main.row, main.c, { readOnly: true, toolProfile: "aegntic-drafting" });
++    assert.deepEqual((await main.c.agent(ctx)).tools, []);
++  } finally {
++    await store.close(); await t.cleanup();
++  }
++});
+diff --git a/apps/dpi-sdk/src/api.ts b/apps/dpi-sdk/src/api.ts
+index 686c58c..7a7da0d 100644
+--- a/apps/dpi-sdk/src/api.ts
++++ b/apps/dpi-sdk/src/api.ts
+@@ -61,6 +61,10 @@ export interface DeviceInfo {
    hostname: string;
    platform: string;
    apiVersion: typeof API_VERSION;
 +  /** Aegntic additive read-only request recovery endpoint. */
 +  aegnticRecovery?: 1;
++  /** Aegntic profile removes every tool before drafting. */
++  aegnticDrafting?: 1;
    durableVersion: string;
    startedAt: number;
    /** Where new sessions start: the directory browser opens here, relative cwds resolve against the first. */

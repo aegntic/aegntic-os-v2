@@ -1,16 +1,16 @@
 # Third-party notices and asset provenance
 
-Updated **17 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Original Aegntic software and associated documentation are MIT licensed; that grant does not replace upstream grants or separately identified asset rights.
+Updated **21 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Original Aegntic software and associated documentation are MIT licensed; that grant does not replace upstream grants or separately identified asset rights.
 
 ## Execution integration
 
 | Component | Recorded source/version | Use and retained notice |
 | --- | --- | --- |
 | disler/durable-pi | `37165c619573dbaf425463038bbffecfe576beec` | External local execution backend; MIT, copyright (c) 2026 IndyDevDan. Original notice: [UPSTREAM_LICENSE](integrations/pi-durable/UPSTREAM_LICENSE). |
-| `@earendil-works/pi-durable`, `pi-ai`, `chord` | 1.0.3, resolved through upstream's existing npm lockfile | MIT family from earendil-works/pi; each package and its transitive dependencies retain their own notices. The source repository does not include the upstream node_modules closure. |
+| `@earendil-works/pi-durable`, `pi-ai`, `chord` | 1.1.0 active; original 1.0.3 qualification retained as history. Updated npm lockfile in `core-1.1.0.patch` | MIT family from earendil-works/pi; each package and its transitive dependencies retain their own notices. The source repository does not include the upstream node_modules closure. |
 | Node.js and Bun | Upstream Node runtime; Bun host requires 1.4.3+ | Separately installed runtimes, not bundled binaries. Keep their applicable notices if redistributing them. |
 
-Provider and recovery changes are delivered as [provider-support.patch](integrations/pi-durable/provider-support.patch), not as a new license over upstream files. The patch adds provider support, read-only existing Codex sign-in access, request-ID recovery and a coding-only tool profile. See [EXECUTION.md](EXECUTION.md) for the qualified runtime and limits.
+Provider and recovery changes are delivered as [provider-support.patch](integrations/pi-durable/provider-support.patch), not as a new license over upstream files. The patch adds provider support, read-only existing Codex sign-in access, request-ID recovery and separate coding/tool-free drafting profiles. See [EXECUTION.md](EXECUTION.md) for the qualified runtime and limits.
 
 The Bun host uses built-in HTTP/SQLite APIs and declares no external runtime package dependencies. The separate Pi backend still requires its upstream packages. Software licenses do not grant access to Codex accounts, hosted models or provider APIs; those services retain separate terms. Credentials and private device state are excluded from source.
 
@@ -45,3 +45,7 @@ The narrated MP4, WebM, frame/audio fallback, subtitles and production notes are
 Convex, Cloudroom, Activepieces, Crawlee, Scrapling, CloakBrowser and the other ecosystem candidates are tracked in the sibling [research notices](../multi-agent-os-integration/THIRD_PARTY_NOTICES.md). They are not all incorporated application dependencies. Cloudroom was built/tested separately; its app adapter remains unconnected. TencentDB Agent Memory and SelfSearch remain research inputs; see [MEMORY-AND-EVOLUTION.md](MEMORY-AND-EVOLUTION.md). GBrain is excluded.
 
 Before packaging the upstream execution backend or other services, resolve and retain notices from the exact installed production dependency closure. This document and the research inventory are not substitutes for that distribution-specific notice bundle. Root Aegntic licensing remains as described in [LICENSING-STATUS.md](LICENSING-STATUS.md).
+
+## Disler news-agent research
+
+[disler/pi-durable-news-agent](https://github.com/disler/pi-durable-news-agent/tree/273b79bb8d3d8907cae9fbd6abd3da163ee2a343), MIT, copyright (c) 2026 IndyDevDan, is catalogued as a research candidate. Its original [MIT notice](integrations/disler/NEWS_AGENT_LICENSE) is retained. No news-agent runtime or Jev hosted model is bundled or connected. Its local Jev wrapper license does not grant hosted inference access. See [DISLER-TOOLS.md](DISLER-TOOLS.md).

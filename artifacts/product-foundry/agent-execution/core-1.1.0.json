@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-21",
+  "status": "PASS",
+  "sourceRevision": "37165c619573dbaf425463038bbffecfe576beec",
+  "durableVersion": "1.1.0",
+  "backend": {
+    "typecheck": "PASS",
+    "testsPassed": 12
+  },
+  "migration": {
+    "from": "1.0.3",
+    "to": "1.1.0",
+    "provider": "faux",
+    "deviceIdentityRetained": true,
+    "savedSubmissionRetained": true,
+    "zeroToolsRetained": true,
+    "inFlightJobResumedOnce": true,
+    "secondReopen": "PASS"
+  },
+  "live": {
+    "provider": "openai-codex",
+    "model": "gpt-6.1-sol",
+    "exactConfirmation": "AEGNTIC_CORE_110_OK",
+    "completion": "PASS",
+    "savedRequestLookup": "PASS",
+    "backendRestartRecovery": "PASS"
+  },
+  "workingBranchChecks": {
+    "bunTests": 56,
+    "assertions": 543,
+    "publicationTests": 6,
+    "lint": "PASS",
+    "build": "PASS",
+    "oxlint": "approved launcher global fallback; explicit changed files; no install/fix"
+  },
+  "review": "independent reviewer found no actionable core issues",
+  "scope": "Core qualification; existing campaign/CRM work remains in progress. No news cron or Jev inference connected."
+}

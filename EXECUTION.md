@@ -16,10 +16,10 @@ This is a trusted, single-user local worker. Its working directory and prompt co
 ## Runtime and provenance
 
 - Disler / IndyDevDan: https://github.com/disler/durable-pi at `37165c619573dbaf425463038bbffecfe576beec`.
-- Underlying packages: `@earendil-works/pi-durable`, `pi-ai` and `chord` at 1.0.3, resolved by the upstream backend's existing npm lockfile.
+- Underlying packages: `@earendil-works/pi-durable`, `pi-ai` and `chord` at **1.1.0**, resolved by the npm lockfile delivered in `core-1.1.0.patch`. The original Disler source commit remains pinned; this is an Aegntic dependency upgrade, not a claimed upstream Disler release.
 - Retained npm and Node runtime for the upstream backend. Node 26.7.0 was used for qualification; upstream package engines accept >=22.19 and the repository recommends Node 24.
 - New Bun host/UI code has no external runtime dependency.
-- Local patch: `integrations/pi-durable/provider-support.patch`. It adds Anthropic support, read-only access to an existing Codex sign-in, a read-only submission lookup by request ID, and a coding-only tool profile. The device advertises `aegnticRecovery: 1`; the client requires this extension as well as v1 / durable 1.0.3.
+- Local patch: `integrations/pi-durable/provider-support.patch`. It adds Anthropic support, read-only access to an existing Codex sign-in, a read-only submission lookup by request ID, and separate coding/tool-free drafting profiles. The device advertises `aegnticRecovery: 1`; the client requires this extension as well as API v1 and an explicitly qualified durable version (1.1.0 active; 1.0.3 retained for recovery/rollback compatibility).
 - Original MIT notice is preserved verbatim in `integrations/pi-durable/UPSTREAM_LICENSE`. See THIRD_PARTY_NOTICES.md.
 
 The stock pinned backend supports OpenRouter and a faux test provider. The faux provider is never accepted as a connected execution model. Anthropic was tested first; its environment endpoint points to an unavailable local proxy. Codex subsequently passed actual model and filesystem-tool checks. The adapter reads the current Codex access token from the existing auth file for each model request, checks expiry, and neither copies nor refreshes/mutates the original token file. When that sign-in expires, refresh it through Codex and reconnect.
@@ -32,7 +32,7 @@ The private `.env` contains the Pi URL, device token, checkout path and project 
 
 ## Reproduce on another machine
 
-Use the upstream Git URL and pinned commit above. Apply the delivered patch with `git apply /absolute/path/to/provider-support.patch`. In `apps/dpi-backend`, use the upstream lockfile with `npm ci --ignore-scripts --no-audit --no-fund`, then `npm run check` and `npm test`. No upstream manifest or lockfile change is required.
+Use the upstream Git URL and pinned commit above. Apply `provider-support.patch`, then `core-1.1.0.patch`, using `git apply /absolute/path/to/the-patch`. Both target the pinned source; retain both patches. In `apps/dpi-backend`, use the upstream lockfile with `npm ci --ignore-scripts --no-audit --no-fund`, then `npm run check` and `npm test`. The core patch deliberately updates the backend manifest and npm lockfile. `core.json` records the lockfile SHA-256. The launcher checks source revision, both patches, lock hash and installed core package versions.
 
 Create owner-readable private configuration with a random device token of at least 32 characters. The app fields are documented in `.env.example`. Set the upstream device fields `DPI_TOKEN`, `DPI_PROVIDER=codex`, `DPI_HOST=127.0.0.1`, `DPI_PORT=4780`, `DPI_HOME`, `DPI_DATA_DIR`, `DPI_START_DIRS`, `DPI_DEVICE_NAME`, and `DPI_MODEL=gpt-6.1-sol` in `.data/pi-runtime.env`. `DPI_CODEX_AUTH_FILE` optionally selects an existing auth file; the default is the current user's `.codex/auth.json`. Sign in normally through Codex. Then use `bun run start:connected`.
 
@@ -50,4 +50,4 @@ The initial view shows final answers and status polling, not token-by-token/tool
 
 ## Qualification
 
-See `artifacts/product-foundry/agent-execution/evidence.md` and `live-execution-qualification.json`. A real agent wrote and read a small file; the host independently checked its contents. This happened in a separate qualification DB/folder with explicit test-fixture approval records. No user project was approved or dispatched during integration testing. Convex, Cloudroom, other model providers, creative rendering and publication remain unconnected.
+Current core: see [CORE-UPGRADE.md](CORE-UPGRADE.md). Historical 1.0.3 qualification: see `artifacts/product-foundry/agent-execution/evidence.md` and `live-execution-qualification.json`. A real agent wrote and read a small file; the host independently checked its contents. This happened in a separate qualification DB/folder with explicit test-fixture approval records. No user project was approved or dispatched during integration testing. Convex, Cloudroom, other model providers, creative rendering and publication remain unconnected.
