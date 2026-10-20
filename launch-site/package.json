@@ -1,1 +1,15 @@
-{"name":"aegntic-assembly","private":true,"type":"module","scripts":{"build":"mkdir -p dist && cp -r public/. dist/ && bun build src/client.js --target=browser --minify --outdir=dist","lint":"bun build src/client.js --target=browser --outdir=/tmp/aegntic-assembly-check && bun build src/server.js --target=bun --external=three --outdir=/tmp/aegntic-assembly-server-check","start":"bun src/server.js","test":"bun test","deploy":"bun run build && bunx wrangler deploy"},"dependencies":{"three":"0.186.1"}}
+{
+  "name": "aegntic-assembly",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p dist && cp -r public/. dist/ && bun build src/client.js --target=browser --minify --splitting --outdir=dist",
+    "lint": "bun build src/client.js --target=browser --splitting --outdir=/tmp/aegntic-assembly-check && bun build src/server.js --target=bun --external=three --outdir=/tmp/aegntic-assembly-server-check && bun build src/worker.js --target=browser --outdir=/tmp/aegntic-worker-check",
+    "start": "bun src/server.js",
+    "test": "bun test",
+    "deploy": "bun run build && wrangler deploy"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  }
+}

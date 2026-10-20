@@ -1,2 +1,5 @@
 # Unified patches retain blank context lines containing one literal space.
 integrations/pi-durable/provider-support.patch whitespace=-blank-at-eol
+
+# Preserve the upstream font notice verbatim, including its original whitespace.
+licenses/media/LIBERATION-LICENSE.txt whitespace=-blank-at-eol,-blank-at-eof

@@ -14,7 +14,7 @@
 
 **Aegntic is a local multi-agent outcome workspace that turns a brief into reviewed work and inspectable evidence.** It combines five outcome families, creative approvals, Pi Durable execution through an existing Codex sign-in, persistent records and a six-control pre-launch review. A separate Three.js Assembly site explores the public launch experience.
 
-**Current state — 17 October 2026:** trusted local execution is connected. The launch site is a local review. Convex, external publishing and mobile distribution remain planned. Source is public; operational state and private continuation stay outside the published checkout.
+**Current state — 21 October 2026:** the local execution integration is documented and qualified. The launch site has a refined product-first preview with an optional three-view architectural study. See [launch-site/README.md](launch-site/README.md) for its scope; this feature has not replaced the protected live deployment. Convex, external publishing and mobile distribution remain planned. Source is public; operational state and private continuation stay outside the published checkout.
 
 ## From an idea to something real
 
