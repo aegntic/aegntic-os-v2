@@ -95,3 +95,7 @@ Separated UI, graphics lifecycle, architecture and materials. Graphics import fa
 Unified bounded waitlist/removal validation for Bun and D1. Added an additive namespaced migration, atomic persisted Worker throttle, honest storage identity, downloadable removal credentials and SQLite-backed Worker-handler tests. Production legacy subscriber continuity is a documented deployment gate; no remote migration, access change or deployment occurred.
 
 Observed verification: 42 Bun tests/395 assertions (including 12 launch tests/88 assertions), six publication regression tests, root/launch lint and builds, explicit-file supplemental Oxlint and independent reviews passed. Browser evidence covers responsive controls, motion/static/no-JS/graphics-failure behavior and memory-only signup/duplicate/download/removal. Hardware and live D1 performance remain unverified. [Evidence](launch-site/evidence/refinement-2026-10-21.md).
+
+### 21 October 2026 — Restore the defining fly-through
+
+Restored the complete seven-stop architectural journey after user review rejected the three-view landing-page simplification. Camera dwell windows and shorter, timed reading panels improve comprehension while preserving the original pavilion, entrance, rotunda and future wings. Hardened signup remains independent. Validation and limitations: `launch-site/evidence/flythrough-restoration-2026-10-21.md`.

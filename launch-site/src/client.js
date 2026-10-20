@@ -1,40 +1,55 @@
 import { initSiteUI } from './site-ui.js';
 
-// HTML, navigation and signup initialize before the optional graphics module.
+// Keep the hardened signup independent of the architectural experience.
 initSiteUI();
-const host=document.querySelector('#scene');
-const status=document.querySelector('#scene-status');
-const quality=document.querySelector('#quality');
-const motion=document.querySelector('#motion');
-const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const wide=matchMedia('(min-width: 900px)');
-const touch=matchMedia('(pointer: coarse)');
-let renderer=null,version=0,selectedView='core',paused=true,manualChoice=false,qualityMode='static';
-function showStatus(text){if(status)status.textContent=text;}
-async function setQuality(mode){
-  qualityMode=mode;
-  const attempt=++version;renderer?.destroy();renderer=null;
-  if(quality)quality.value=mode;
-  document.querySelectorAll('[data-view]').forEach(button=>{button.disabled=true;});
-  if(motion){motion.disabled=mode==='static';motion.textContent=paused?'Play ambient motion':'Pause ambient motion';motion.setAttribute('aria-pressed',String(!paused));}
-  if(mode==='static'){showStatus('Architectural study / static view');return;}
-  showStatus('Preparing architectural study…');
-  try{
-    const {initPavilion}=await import('./pavilion.js');
-    if(attempt!==version)return;
-    renderer=initPavilion(host,{onStatus:showStatus});renderer.setView(selectedView);renderer.setPaused(paused);
-    document.querySelectorAll('[data-view]').forEach(button=>{button.disabled=false;});
-  }catch{
-    renderer?.destroy();renderer=null;
-    qualityMode='static';if(quality)quality.value='static';if(motion)motion.disabled=true;
-    showStatus('Static study / interactive graphics unavailable');
+const mode = document.querySelector('#tour-mode');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+let tour = null;
+let generation = 0;
+let loading = false;
+mode.value = reduced.matches ? 'static' : 'standard';
+for (const control of document.querySelectorAll('#assemble, #motion')) control.disabled = true;
+function readChapter(index) {
+  if (!document.body.classList.contains('static-tour')) return;
+  document.querySelector(`[data-step="${index}"]`)?.scrollIntoView({ behavior: 'auto', block: 'start' });
+}
+document.querySelectorAll('.rail-stop').forEach(button => button.addEventListener('click', event => {
+  if (document.body.classList.contains('static-tour')) { event.stopImmediatePropagation(); readChapter(button.dataset.stop); }
+}));
+document.querySelector('#enter-walk').addEventListener('click', event => {
+  if (document.body.classList.contains('static-tour')) { event.stopImmediatePropagation(); readChapter(1); }
+});
+
+async function startTour() {
+  if (tour || loading || mode.value === 'static') return;
+  const attempt = ++generation;
+  loading = true;
+  try {
+    const { initFlythrough } = await import('./flythrough.js');
+    if (attempt !== generation || mode.value === 'static') return;
+    tour = initFlythrough();
+  } catch {
+    document.body.classList.add('static-tour');
+    mode.value = 'static';
+    for (const control of document.querySelectorAll('#assemble, #motion')) control.disabled = true;
+    const status = document.querySelector('#scene-status');
+    if (status) status.textContent = 'Graphics unavailable. Read the chapter guide below.';
+  } finally {
+    if (attempt === generation) loading = false;
   }
 }
-window.addEventListener('pavilion:view',event=>{selectedView=event.detail.view;renderer?.setView(selectedView);});
-window.addEventListener('pavilion:motion',event=>{paused=event.detail.paused;renderer?.setPaused(paused);});
-window.addEventListener('pavilion:quality',event=>{manualChoice=true;setQuality(event.detail.quality);});
-const adapt=()=>{if(reduced.matches){paused=true;setQuality('static');}else if(!manualChoice)setQuality(wide.matches&&!touch.matches?'standard':'static');};
-reduced.addEventListener('change',adapt);wide.addEventListener('change',adapt);touch.addEventListener('change',adapt);
-window.addEventListener('pagehide',()=>{++version;renderer?.destroy();renderer=null;});
-window.addEventListener('pageshow',event=>{if(event.persisted)setQuality(reduced.matches?'static':qualityMode);});
-adapt();
+mode.addEventListener('change', () => {
+  if (!tour) startTour();
+});
+reduced.addEventListener('change', () => {
+  if (reduced.matches) {
+    mode.value = 'static';
+    document.body.classList.add('static-tour');
+  }
+});
+startTour();
+window.addEventListener('pagehide', () => {
+  ++generation; loading = false;
+  tour?.destroy(); tour = null;
+});
+window.addEventListener('pageshow', event => { if (event.persisted) startTour(); });

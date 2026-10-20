@@ -37,7 +37,7 @@ export function createSite({ port = 4320, database = resolve(root, '.data/waitli
   const server = Bun.serve({ hostname: '127.0.0.1', port, maxRequestBodySize: 2048, async fetch(request, server) {
     try {
       const url = new URL(request.url);
-      const asset = files[url.pathname] || (/^\/(?:chunk|pavilion)-[a-zA-Z0-9_-]+\.js$/.test(url.pathname)
+      const asset = files[url.pathname] || (/^\/(?:chunk|pavilion|flythrough)-[a-zA-Z0-9_-]+\.js$/.test(url.pathname)
         ? [`dist/${url.pathname.slice(1)}`, 'text/javascript'] : null);
       if (['GET', 'HEAD'].includes(request.method) && asset) {
         const [path, type] = asset; const file = Bun.file(resolve(root, path));

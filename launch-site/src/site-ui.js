@@ -1,70 +1,9 @@
-const CAPTIONS = { plan: 'A foundation you can inspect. Room for what comes next.', core: 'The local execution foundation, represented in chrome and glass.', next: 'Outlined wings represent planned work, not connected services.' };
-
 export function initSiteUI() {
   const cleanups = [];
   const on = (target, type, handler) => {
     target.addEventListener(type, handler);
     cleanups.push(() => target.removeEventListener(type, handler));
   };
-  const emit = (type, detail) => window.dispatchEvent(new CustomEvent(type, { detail }));
-  const menu = document.querySelector('#menu-toggle');
-  const navigation = document.querySelector('#navigation');
-  const narrow = matchMedia('(max-width: 600px)');
-  const closeMenu = () => { menu.setAttribute('aria-expanded', 'false'); navigation.hidden = narrow.matches; };
-  menu.hidden = !narrow.matches;
-  closeMenu();
-  on(menu, 'click', () => {
-    const expanded = menu.getAttribute('aria-expanded') !== 'true';
-    menu.setAttribute('aria-expanded', String(expanded));
-    navigation.hidden = !expanded;
-  });
-  on(narrow, 'change', () => {
-    if (!narrow.matches && document.activeElement === menu) {
-      navigation.hidden = false;
-      navigation.querySelector('a').focus();
-    }
-    menu.hidden = !narrow.matches;
-    if (narrow.matches && navigation.contains(document.activeElement)) menu.focus();
-    closeMenu();
-  });
-  on(navigation, 'click', (event) => {
-    const link = event.target.closest('a');
-    if (link && narrow.matches) {
-      const target = document.querySelector(link.hash);
-      if (target) { target.setAttribute('tabindex', '-1'); target.focus({ preventScroll: true }); }
-      closeMenu();
-    }
-  });
-  on(document, 'keydown', (event) => {
-    if (event.key === 'Escape' && narrow.matches && menu.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); }
-  });
-  const views = [...document.querySelectorAll('[data-view]')];
-  const setView = (view) => {
-    views.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
-    document.querySelector('#view-caption').textContent = CAPTIONS[view];
-    emit('pavilion:view', { view });
-  };
-  views.forEach((button) => on(button, 'click', () => setView(button.dataset.view)));
-  setView('core');
-  const motion = document.querySelector('#motion');
-  const quality = document.querySelector('#quality');
-  quality.disabled = false;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let paused = true;
-  const updateMotion = () => {
-    motion.setAttribute('aria-pressed', String(!paused));
-    motion.textContent = paused ? 'Play ambient motion' : 'Pause ambient motion';
-    motion.disabled = quality.value === 'static';
-    emit('pavilion:motion', { paused });
-  };
-  quality.value = reduced.matches || matchMedia('(max-width: 899px)').matches || matchMedia('(pointer: coarse)').matches ? 'static' : 'standard';
-  updateMotion();
-  on(motion, 'click', () => { paused = !paused; updateMotion(); });
-  on(quality, 'change', () => { updateMotion(); emit('pavilion:quality', { quality: quality.value }); });
-  on(reduced, 'change', () => {
-    if (reduced.matches) { paused = true; quality.value = 'static'; updateMotion(); emit('pavilion:quality', { quality: 'static' }); }
-  });
-
   const form = document.querySelector('#waitlist');
   const status = document.querySelector('#form-status');
   const submit = form.querySelector('[type=submit]');
