@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#efebe2">
-  <title>Aegntic — Stop prompting. Start building.</title>
-  <meta name="description" content="An autonomous AI software studio drawn as a real building. Scroll from the 1:100 architectural plan into brushed steel, optical glass, and living 3D blueprint.">
-  <meta property="og:title" content="Aegntic — Prompts die in chat. Systems ship.">
+  <title>Aegntic — Step inside the build.</title>
+  <meta name="description" content="Explore the Aegntic workspace as an architectural fly-through. Scroll from the 1:100 architectural plan into brushed steel, optical glass, and living 3D blueprint.">
+  <meta property="og:title" content="Aegntic — Step inside the build.">
   <meta property="og:description" content="Walk inside the Aegntic OS v2 architecture: built systems in brushed steel and optical glass, upcoming systems in 1:1 3D blueprint.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://build.aegntic.ai/">
@@ -17,8 +17,8 @@
   <link rel="stylesheet" href="/style.css">
   <script src="/client.js" type="module"></script>
 </head>
-<body data-mode="light" data-stop="0">
-  <a class="skip" href="#invitation">Skip to early access</a>
+<body class="static-tour" data-mode="light" data-stop="0">
+  <a class="skip" href="#invitation">Skip to updates</a>
 
   <!-- Top Architectural Bar -->
   <header class="topbar">
@@ -38,9 +38,10 @@
     </nav>
 
     <div class="mast-controls">
-      <button id="assemble" type="button" aria-pressed="false" title="Explode or assemble the 3-layer core">Bring it together <span>＋</span></button>
-      <button id="motion" type="button" aria-pressed="false">Pause motion</button>
-      <a class="pill" href="#invitation">Claim a seat</a>
+      <button id="assemble" type="button" disabled aria-pressed="false" title="Explode or assemble the 3-layer core">Bring it together <span>＋</span></button>
+      <button id="motion" type="button" disabled aria-pressed="false">Pause motion</button>
+      <label class="tour-choice">View <select id="tour-mode"><option value="standard">Fly-through</option><option value="static">Read the tour</option></select></label>
+      <a class="pill" href="#invitation">Follow the build</a>
     </div>
   </header>
 
@@ -57,25 +58,24 @@
 
     <!-- STOP 00: Opening Architectural Sheet Hero (Fades out smoothly as walls rise) -->
     <section class="sheet-hero" id="sheet-hero" aria-label="Ground floor plan">
-      <p class="sheet-hero__kicker">AEGNTIC OS V2 <span>·</span> COURTYARD PAVILION <span>·</span> 1 : 100</p>
+      <p class="sheet-hero__kicker">AEGNTIC OS V2 <span>·</span> AN ARCHITECTURAL JOURNEY</p>
       <h1 class="sheet-hero__title" id="hook">
-        <span>Prompts die</span>
-        <span>in chat.</span>
-        <span>Systems <em>ship.</em></span>
+        <span>Step inside</span>
+        <span>the <em>build.</em></span>
       </h1>
       <p class="sheet-hero__lede">
-        Aegntic is a sovereign AI studio built like real architecture. What runs today is solid brushed steel and optical glass. What comes next is drawn at full 1:1 scale. Scroll to raise the walls and walk inside.
+        Walk through a workspace for briefs, agents and reviewed results. Solid rooms represent the local foundation. Outlined wings show what comes next.
       </p>
       <div class="sheet-hero__cta">
         <button type="button" class="pill pill--solid" id="enter-walk">Step inside the plan ↓</button>
-        <a class="link-inline" href="#invitation">Skip to early access ↗</a>
+        <a class="link-inline" href="#invitation">Skip to updates ↗</a>
       </div>
 
       <div class="titleblock" aria-hidden="true">
         <div><span>Project</span><b>Aegntic OS v2</b></div>
         <div><span>Drawing</span><b>Pavilion Plan &amp; Section</b></div>
         <div><span>Scale</span><b>1 : 100 (Cut @ 1.20m)</b></div>
-        <div><span>Status</span><b id="scene-status">Live 3D Architecture</b></div>
+        <div><span>Status</span><b id="scene-status">Architectural representation</b></div>
       </div>
     </section>
 
@@ -84,20 +84,20 @@
       <div class="room-caption__eyebrow">
         <span class="room-caption__no" id="cap-no">01</span>
         <span class="room-caption__kicker" id="cap-kicker">SOUTH COURTYARD · THE THRESHOLD</span>
-        <span class="room-caption__badge" id="cap-badge">BUILT</span>
+        <span class="room-caption__badge" id="cap-badge">LOCAL FOUNDATION</span>
       </div>
       <h2 class="room-caption__title" id="cap-title">Zero smoke and mirrors.</h2>
       <p class="room-caption__body" id="cap-body">
         You step through a 4.5-metre brushed steel and refractive glass portal. Every room ahead obeys one rule: proven code is solid metal and glass; upcoming architecture remains open blueprint linework.
       </p>
       <div class="room-caption__footer">
-        <button type="button" class="spec-trigger" id="open-spec">Inspect room dossier ＋</button>
+        <button type="button" class="spec-trigger" id="open-spec">Inside this room ＋</button>
         <button type="button" class="spec-next" id="next-stop">Next room →</button>
       </div>
     </aside>
 
     <!-- Single Clean 3D Target Hotspot Pin (Projects onto the focal object of each room) -->
-    <div class="spot-layer" aria-hidden="true">
+    <div class="spot-layer">
       <button type="button" class="spot-pin" id="spot-pin">
         <span class="spot-pin__ring"><i></i></span>
         <span class="spot-pin__line"></span>
@@ -125,7 +125,7 @@
   </div>
 
   <!-- Slide-Over Architectural Dossier Drawer (Like Casa Serra's #file drawer) -->
-  <aside class="dossier" id="dossier" aria-hidden="true" aria-labelledby="dossier-title">
+  <dialog class="dossier" id="dossier" aria-labelledby="dossier-title">
     <button type="button" class="dossier__close" id="close-spec">Close ×</button>
     <p class="dossier__no" id="dossier-no">ROOM 01 · DOSSIER</p>
     <h3 class="dossier__title" id="dossier-title">The Glass Threshold</h3>
@@ -135,43 +135,43 @@
     <div class="dossier__links">
       <a id="dossier-link" class="pill pill--solid" href="https://github.com/aegntic/aegntic-os-v2" target="_blank" rel="noopener noreferrer">View source proof ↗</a>
     </div>
-  </aside>
+  </dialog>
 
   <!-- Scroll Track Driving the Camera Curve & Section Cut -->
   <main id="top" class="scroll-track">
     <section class="scroll-step" data-step="0" aria-label="Stop 0: The 1:100 Floor Plan">
       <div class="sr-step">
-        <h2>The 1:100 Pavilion Plan</h2>
+        <h2>The 1:100 Pavilion Plan</h2><p class="tour-summary">The pavilion is a spatial map of Aegntic: a local foundation surrounded by planned services.</p>
       </div>
     </section>
 
     <section class="scroll-step" data-step="1" id="build" aria-label="Stop 1: The Glass Threshold">
       <div class="sr-step">
-        <h2 id="premise">01 · The Glass Threshold</h2>
+        <h2 id="premise">01 · The Glass Threshold</h2><p class="tour-summary">Start with a brief. Define the audience, source material and outcome before the work begins.</p>
       </div>
     </section>
 
     <section class="scroll-step" data-step="2" aria-label="Stop 2: The Control Forge">
       <div class="sr-step">
-        <h2 id="build-title">02 · The Control Forge</h2>
+        <h2 id="build-title">02 · The Control Forge</h2><p class="tour-summary">Review the plan and the draft. You choose what is ready to run or export.</p>
       </div>
     </section>
 
     <section class="scroll-step" data-step="3" aria-label="Stop 3: The Pi Durable Engine Rotunda">
       <div class="sr-step">
-        <h2>03 · The Pi Durable Engine Rotunda</h2>
+        <h2>03 · The Pi Durable Engine Rotunda</h2><p class="tour-summary">Pi Durable owns execution recovery. The local Codex connection does the work.</p>
       </div>
     </section>
 
     <section class="scroll-step" data-step="4" aria-label="Stop 4: The Proving Skybridge">
       <div class="sr-step">
-        <h2>04 · The Proving Skybridge</h2>
+        <h2>04 · The Proving Skybridge</h2><p class="tour-summary">Inspect the build record. Test evidence describes specific checks, not a guarantee about every future run.</p>
       </div>
     </section>
 
     <section class="scroll-step" data-step="5" aria-label="Stop 5: The Living Blueprint Atrium">
       <div class="sr-step">
-        <h2 id="participate-title">05 · The Living Blueprint Atrium</h2>
+        <h2 id="participate-title">05 · The Living Blueprint Atrium</h2><p class="tour-summary">Convex, connector automation and extraction workers belong to the roadmap; they are not connected here.</p>
       </div>
     </section>
 
@@ -183,9 +183,9 @@
             <img src="/mark.webp" alt="" width="24" height="24">
             <span>ROOM 06 · THE DISPATCH TERRACE</span>
           </div>
-          <h2 id="invite-title">Every building starts flat.<br>Ours <em>ships.</em></h2>
+          <h2 id="invite-title">You’ve seen the plan.<br>Watch it <em>take shape.</em></h2>
           <p class="finale-sub">
-            Claim an early seat while the remaining blueprint wings close in. Your reservation is minted directly into the host SQLite vault—no spam funnels, no third-party trackers, and instant self-removal at any time.
+            Follow Aegntic as the workspace takes shape. This list records interest; it does not promise access or a launch date.
           </p>
           <div class="finale-links">
             <a href="https://github.com/aegntic/aegntic-os-v2" target="_blank" rel="noopener noreferrer">GitHub Repository ↗</a>
@@ -194,58 +194,59 @@
           </div>
         </div>
 
-        <div class="signup">
-          <form id="waitlist" method="post" action="/api/waitlist">
-            <label for="email">Your email</label>
-            <div class="email-row">
-              <input id="email" type="email" name="email" autocomplete="email" placeholder="you@domain.com" required maxlength="254">
-              <button type="submit" disabled aria-label="Claim your seat">Reserve ↗</button>
-            </div>
-            <label for="interest" class="interest-label">How will you use Aegntic?</label>
-            <select name="interest" id="interest">
-              <option value="follow">Follow the architecture as it ships</option>
-              <option value="build">Deploy autonomous workflows</option>
-              <option value="both">Both — build &amp; collaborate</option>
-            </select>
-            <label class="consent">
-              <input name="consent" type="checkbox" required>
-              <span>Notify me when Aegntic access opens. I can revoke my seat at any time.</span>
-            </label>
-            <div class="trap" aria-hidden="true">
-              <label>Company website<input name="website" tabindex="-1" autocomplete="off"></label>
-            </div>
-            <p class="storage-note">Stored locally in the host SQLite vault. No external email automation is connected yet. <a href="#privacy">Data &amp; instant removal</a></p>
-            <p id="form-status" role="status" aria-live="polite"></p>
-          </form>
-
-          <div class="share">
-            <p>Bring an engineer or founder into the walkthrough</p>
-            <div class="share-btns">
-              <button id="share" type="button">Share the architecture ↗</button>
-              <button id="copy" type="button">Copy link</button>
-            </div>
-            <p id="share-status" role="status" aria-live="polite"></p>
-          </div>
-
-          <details id="privacy">
-            <summary>Vault privacy &amp; self-service removal</summary>
-            <p>Your email, selected intent, timestamp, and a cryptographic removal key are stored in a private SQLite database on this host. Enter your removal key below to purge your record immediately.</p>
-            <form id="remove" method="post" action="/api/waitlist/remove">
-              <label for="removal">Removal key</label>
-              <div class="removal-row">
-                <input id="removal" name="code" required autocomplete="off" minlength="40" maxlength="100" placeholder="48-character hex removal key">
-                <button type="submit" disabled>Purge record</button>
-              </div>
-              <p id="removal-status" role="status"></p>
-            </form>
-          </details>
+    <div class="signup">
+      <form id="waitlist" method="post" action="/api/waitlist">
+        <label for="email">Your email</label>
+        <input id="email" type="email" name="email" autocomplete="email" placeholder="you@yourstudio.com" required maxlength="254">
+        <label for="interest">What brings you here? <span class="optional">Optional</span>
+        </label>
+        <select name="interest" id="interest">
+        <option value="follow">Following the build</option>
+        <option value="build">Using the future workspace</option>
+        <option value="both">A bit of both</option>
+        </select>
+        <label class="consent">
+        <input name="consent" type="checkbox" required><span>I'd like build and access updates from Aegntic. I can remove my signup using my saved removal code.</span>
+        </label>
+        <div class="trap" aria-hidden="true">
+          <label>Company website<input name="website" tabindex="-1" autocomplete="off">
+          </label>
         </div>
+        <button class="button button-dark signup-submit" type="submit" disabled>Keep me in the loop <span aria-hidden="true">↗</span>
+        </button>
+        <button id="cancel-signup" class="text-link" type="button" hidden>Cancel request</button>
+        <p class="storage-note">This form records interest. Email delivery is not connected. Your storage environment is confirmed after signup. <a href="#privacy">Data &amp; removal</a>
+        </p>
+        <p id="form-status" role="status" aria-live="polite">
+        </p>
+      </form>
+      <div id="removal-credential" class="credential" hidden>
+        <p id="credential-owner">
+        </p>
+        <p><strong>Keep your removal code.</strong> It is shown once and isn't emailed. Anyone holding it can remove this signup.</p><code id="saved-removal-code"></code>
+        <button class="text-link" id="download-removal" type="button">Download removal credential ↓</button>
+      </div>
+      <details id="privacy">
+        <summary>Your data &amp; self-service removal <span aria-hidden="true">＋</span>
+        </summary>
+        <p>We record your email, selected interest, consent and signup time. The server stores a hash of your removal code. Aegntic operates this signup list. Records are retained until removed; there is no automatic expiry. Signup may use a local host database or Cloudflare D1; the confirmation identifies which. The code is not saved to browser storage; save the credential before leaving.</p>
+        <p>Use the removal code saved when you signed up. If you lose it, <a href="https://aegntic.ai/#contact">contact Aegntic</a> for help. Duplicate signup requests do not issue a replacement code.</p>
+        <form id="remove" method="post" action="/api/waitlist/remove">
+          <label for="removal">Removal code</label>
+          <input id="removal" name="code" required autocomplete="off" minlength="40" maxlength="100" spellcheck="false">
+          <button class="button button-outline" type="submit" disabled>Remove my signup <span aria-hidden="true">↗</span>
+          </button>
+          <p id="removal-status" role="status" aria-live="polite">
+          </p>
+        </form>
+      </details>
+    </div>
       </div>
     </section>
   </main>
 
   <noscript>
-    <p>Enable JavaScript to walk the interactive 3D architectural floor plan and reserve a seat.</p>
+    <p>The room summaries below describe the tour. Enable JavaScript for the fly-through and signup, or contact Aegntic at aegntic.ai/#contact.</p>
   </noscript>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Third-party notices and asset provenance
 
-Updated **17 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Original Aegntic software and associated documentation are MIT licensed; that grant does not replace upstream grants or separately identified asset rights.
+Updated **21 October 2026**. This file describes the local application, its separate launch-site review and associated media production. Third-party source retains its original grants and attribution. Original Aegntic software and associated documentation are MIT licensed; that grant does not replace upstream grants or separately identified asset rights.
 
 ## Execution integration
 
@@ -45,3 +45,7 @@ The narrated MP4, WebM, frame/audio fallback, subtitles and production notes are
 Convex, Cloudroom, Activepieces, Crawlee, Scrapling, CloakBrowser and the other ecosystem candidates are tracked in the sibling [research notices](../multi-agent-os-integration/THIRD_PARTY_NOTICES.md). They are not all incorporated application dependencies. Cloudroom was built/tested separately; its app adapter remains unconnected. TencentDB Agent Memory and SelfSearch remain research inputs; see [MEMORY-AND-EVOLUTION.md](MEMORY-AND-EVOLUTION.md). GBrain is excluded.
 
 Before packaging the upstream execution backend or other services, resolve and retain notices from the exact installed production dependency closure. This document and the research inventory are not substitutes for that distribution-specific notice bundle. Root Aegntic licensing remains as described in [LICENSING-STATUS.md](LICENSING-STATUS.md).
+
+## 21 October 2026 — Pavilion refinement assets
+
+The product-first Pavilion preview retains Three.js 0.186.1 and the original Aegntic mark. Geometry, procedural surface textures and the new schematic social artwork are original Aegntic work; the schematic PNGs are not browser screenshots or live-run evidence. No new browser/runtime package was added. Optional artwork reproduction uses already-installed Pillow and Liberation Sans/Serif fonts (SIL Open Font License 1.1; full notice in [LIBERATION-LICENSE.txt](licenses/media/LIBERATION-LICENSE.txt)); tool/font binaries are not bundled. Earlier media notices and historical review assets remain intact.

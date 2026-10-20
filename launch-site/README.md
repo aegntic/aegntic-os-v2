@@ -1,40 +1,56 @@
-# Aegntic / Assembly
+# Aegntic / step inside the build
 
-Local launch-site review selected by the user from three directions: bright architectural Assembly, cinematic Black box, editorial Field notes. Assembly was selected on 16 October 2026. This is a review artifact; launch graphics, teaser and release remain unapproved.
+The full seven-stop architectural fly-through is the primary experience: floor plan, threshold, forge, engine rotunda, proving bridge, future atrium and terrace. The original pavilion geometry is restored. Short captions appear at camera dwell points; technical detail is in a native modal dossier. The building is a representation of the system, not live telemetry.
+This is the 21 October 2026 feature preview. It has not replaced the existing protected deployment. Public access rules, production D1 migration/legacy subscriber continuity, and real-device performance qualification remain separate release gates. No 9.6 rating or production certification is asserted.
 
-## Run
+## Review locally
 
-Use Bun 1.4.3+:
+Use the existing Bun 1.4.3+ environment and pinned Three.js 0.186.1:
 
 ```sh
-bun install --frozen-lockfile --ignore-scripts
 bun run build
 bun start
 ```
 
-Open http://127.0.0.1:4320/. Separate from the agent workspace at port 4317. It has no agent-dispatch routes or access to the Pi device token. `PORT` optionally changes the loopback port.
+Open `http://127.0.0.1:4320/`. `PORT` selects another loopback port. Dependency reproduction uses `bun install --frozen-lockfile --ignore-scripts`; no package installation is necessary in the prepared checkout. This site is separate from the agent workspace and has no agent dispatch or model credentials.
 
-Three.js 0.186.1 is pinned in package.json/bun.lock, MIT notice preserved at public/THREE-LICENSE.txt. Procedural model, no remote HDRs, fonts or asset requests. Original Aegntic mark reused from the existing project at the user's direction. The 3D object is a visual metaphor, not claimed hardware. Static CSS fallback, motion pause, reduced-motion preference, background/offscreen throttling, keyboard controls and visible focus are included.
+## Experience
 
-## Waitlist and sharing
+- Full-screen scroll-controlled architectural journey with direct room navigation and next-room controls.
+- Short reading panels fade during camera travel. Camera dwell points give text a stable reading window.
+- Mobile retains the journey with compact controls; reduced motion and the explicit “Read the tour” option provide static room summaries.
+- Signup initializes independently of the lazy graphics module. No external textures, analytics or provider calls.
 
-The endpoint writes to a private, Git-ignored local `.data/waitlist.db` with owner-only file permissions. It validates email/interest/consent, checks same-origin JSON, limits request size and per-address attempts, ignores honeypots and deduplicates normalized addresses. It sends no email. Signups receive a one-time removal code; only its hash is stored. Repeat signup does not rotate or reveal an existing removal credential. The UI identifies local-only collection and offers removal. Never commit/export subscribers to public artifacts.
+## Modules
 
-The forms default to POST and remain disabled if JavaScript fails. A failed signup is not displayed as a success. Clipboard/native-share actions share the real GitHub build URL rather than a localhost URL. No social post is sent automatically.
+| File | Responsibility |
+| --- | --- |
+| `public/index.html`, `style.css` | Full-screen stage, reading panels, accessible dossier and static tour |
+| `src/site-ui.js` | Bounded signup/removal requests and explicit credential download |
+| `src/client.js` | Lazy graphics entry and independent signup initialization |
+| `src/flythrough.js` | Original pavilion geometry, procedural materials, seven-stop camera and tour lifecycle |
+| `src/pavilion.js`, `architecture.js`, `materials.js` | Retained prior three-view prototype; not used by the restored tour |
+| `src/waitlist.js` | Bounded HTTP input, consent, removal hashing and shared response contract |
+| `src/server.js`, `worker.js` | Local Bun/SQLite and Cloudflare asset/D1 adapters |
 
-Before public deployment: choose a canonical public URL and configure absolute OG/canonical metadata; finalize operator/privacy/contact information and email verification/removal links; replace in-memory rate limits with deployment-appropriate abuse protection; configure private durable data storage/backups and explicit consent/suppression handling. Keep the agent workspace separate. This Bun/SQLite host has not been ported to Workers/celld. Production publication and external mail delivery are not implied by this prototype.
+## Signup and deployment
 
-## Creative review package
+Read [DEPLOYMENT.md](DEPLOYMENT.md). The Bun adapter preserves its existing local `signups` table. The Worker uses additive namespaced tables and a persisted atomic throttle. Production legacy-table reconciliation is explicitly required before switching adapters. No migration was applied remotely.
 
-- public/social/assembly-{landscape,square,portrait,vertical}.{svg,png}: 1920×1080, 1080×1080, 1080×1350, 1080×1920.
-- creative/AEGNTIC-assembly-45s-review.mp4: 45-second / 24fps / 1920×1080 caption-led silent review cut, six gently moving scenes using a capture of the real Three.js model. No voiceover/music; not represented as a live stream or a demonstration of unconnected features.
-- creative/scene-*.svg and .png: editable review artwork and timed scene sources.
-- Social CTA: follow the build at the existing GitHub repository. Site CTA: join the local-review waitlist. Move to a public waitlist link only after the public destination is configured and approved.
+Success identifies local storage or Cloudflare D1 accurately. A new signup receives a random removal credential whose hash is stored server-side; duplicate requests cannot replace it. The browser offers a user-initiated credential download, handles uncertain network outcomes honestly and sends no email. Real signup data and runtime databases must stay outside source.
 
-Approval of the aesthetic does not constitute approval of the final graphics, teaser or deployment. Existing application creative approvals were not altered.
+## Verification
 
-## Checks
+```sh
+bun run lint
+bun test
+bun run build
+```
 
-`bun test`, `bun run lint`, `bun run build`. Two meaningful waitlist tests verify consent/origin rejection, persistence across restart, deduplication, removal and rate limiting. Root application tests remain intact; 21 total tests / 252 assertions pass. Supplemental Oxlint ran on the three new JS files via the approved global fallback, with resolution evidence. No ESLint/TypeScript tooling existed here and none was removed.
+The root application's checks and publication scanner remain required. Worker tests execute the actual handler and unmodified SQL through a Bun SQLite D1-shape adapter. They qualify contract/SQLite behavior, not the live Cloudflare service. Browser results and limitations: [evidence/refinement-2026-10-21.md](evidence/refinement-2026-10-21.md).
 
-Browser verification: real WebGL canvas, assembly toggle, pause, 390px mobile width with no overflow, synthetic signup and code-based removal, clipboard sharing feedback. Review caught and fixed GET-form fallback exposure. Desktop/mobile captures under evidence/. No production tenant/security qualification is claimed.
+## Assets and attribution
+
+Three.js remains 0.186.1/MIT; full notice is `public/THREE-LICENSE.txt`. Existing Aegntic mark is retained. New geometry/materials are procedural and original. New `public/social/pavilion-{landscape,square}.png` are original schematic artwork, not screenshots or claims of a real model run. Reproduce with a local Pillow-capable Python environment and `../scripts/render-pavilion-social.py --font-dir /path/to/liberation`; no fonts or Pillow binaries are bundled. Notices: [../THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
+
+Earlier `creative/` and `social/assembly-*` files are retained as historical review assets. Their descriptions and graphics predate this refinement; they are not presented as the current teaser or a fresh launch approval.
